@@ -33,14 +33,16 @@
   background: rgba(22, 20, 29, 0.65);
   backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(223, 186, 115, 0.12);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(223, 186, 115, 0.02);
 }
 
 @utility glass-card-hover {
-  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: all 0.7s cubic-bezier(0.2, 1, 0.3, 1);
   &:hover {
     background: rgba(22, 20, 29, 0.85);
-    border-color: rgba(223, 186, 115, 0.3);
-    box-shadow: 0 0 25px rgba(223, 186, 115, 0.1);
+    border-color: rgba(223, 186, 115, 0.4);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(223, 186, 115, 0.15);
+    transform: translateY(-5px);
   }
 }
 
@@ -52,6 +54,32 @@ body {
   -webkit-font-smoothing: antialiased;
   background-image: radial-gradient(circle at 50% 50%, #16141D 0%, #0D0C10 100%);
   background-attachment: fixed;
+}
+
+/* Film Grain Texture */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -100%;
+  z-index: 999;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+  animation: grain 8s steps(10) infinite;
+}
+
+@keyframes grain {
+  0%, 100% { transform:translate(0, 0) }
+  10% { transform:translate(-5%, -10%) }
+  20% { transform:translate(-15%, 5%) }
+  30% { transform:translate(7%, -25%) }
+  40% { transform:translate(-5%, 25%) }
+  50% { transform:translate(-15%, 10%) }
+  60% { transform:translate(15%, 0) }
+  70% { transform:translate(0, 15%) }
+  80% { transform:translate(3%, 35%) }
+  90% { transform:translate(-10%, 10%) }
 }
 
 ::selection {
@@ -108,4 +136,9 @@ html.lenis, html.lenis body {
 @keyframes pulseGlow {
   0%, 100% { opacity: 0.3; transform: scale(1); }
   50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+@keyframes drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100px); }
 }

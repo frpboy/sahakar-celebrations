@@ -10,24 +10,28 @@ export const VenueMap: React.FC = () => {
   const directionsUrl = weddingData.wedding.mapsUrl;
 
   const googleCalendarUrl = generateGoogleCalendarUrl({
-    title: `Wedding Celebration: Shabin & Sana and Sameer & Nihala`,
-    details: `You are joyfully invited to celebrate the matrimonial unions of:\n\nMuhammed Shabin & Sana\nMohammed Sameer Kallangadan & Nihala Jasmin KK\n\nDate: Sunday, July 19, 2026\nTime: 4:30 PM Onwards\nVenue: Shifa Convention Center\n\nVenue Link: https://maps.app.goo.gl/JDr5v3dgUuwPNbnJA\n\nWe look forward to your presence and heartfelt prayers.`,
+    title: `Family Celebration: Shabin & Sana and Sameer & Nihala`,
+    details: `You are cordially invited to celebrate the matrimonial unions of:\n\nMuhammed Shabin & Sana\nMohammed Sameer Kallangadan & Nihala Jasmin KK\n\nDate: Sunday, July 19, 2026\nTime: 4:30 PM Onwards\nVenue: Shifa Convention Center, Perinthalmanna\n\nVenue Link: https://maps.app.goo.gl/JDr5v3dgUuwPNbnJA\n\nWe look forward to your gracious presence.`,
     location: `${weddingData.wedding.venue}, ${weddingData.wedding.address}`,
     startDateIso: weddingData.wedding.date,
   });
 
   return (
-    <section className="py-20 px-4 md:px-12 max-w-4xl mx-auto w-full relative z-20">
+    <section className="py-24 px-4 md:px-12 max-w-4xl mx-auto w-full relative z-20">
       {/* Centered Map Card */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="glass-card p-8 md:p-12 rounded-[2.5rem] shadow-2xl relative flex flex-col items-center text-center"
+        className="glass-card p-8 md:p-12 rounded-[2.5rem] shadow-2xl relative flex flex-col items-center text-center overflow-hidden"
       >
+        {/* Edge Lighting & Ambient Glow */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-gold/5 pointer-events-none" />
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+        
         {/* Top Icon */}
-        <div className="w-12 h-12 rounded-full border border-gold/20 flex items-center justify-center mb-6 bg-gold/5">
+        <div className="relative z-10 w-12 h-12 rounded-full border border-gold/20 flex items-center justify-center mb-6 bg-gold/5">
           <MapPin className="w-5 h-5 text-gold/70" />
         </div>
 

@@ -19,9 +19,14 @@ const EventCard: React.FC<EventProps> = ({ title, date, time, location, descript
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="glass-card glass-card-hover p-8 md:p-10 rounded-2xl relative shadow-2xl w-full max-w-2xl mx-auto text-center"
+      className="glass-card glass-card-hover p-8 md:p-10 rounded-2xl relative shadow-2xl w-full max-w-2xl mx-auto text-center overflow-hidden"
     >
-      <div className="flex flex-col items-center justify-center gap-2 mb-6">
+      {/* Edge Lighting & Ambient Glow */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-gold/5 pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" />
+      
+      <div className="flex flex-col items-center justify-center gap-2 mb-6 relative z-10">
         <span className="text-[10px] font-sans tracking-[0.3em] text-gold uppercase block mb-1 font-bold">
           {date} <span className="mx-2 text-gold/30">•</span> {time}
         </span>

@@ -37,7 +37,7 @@ const CoupleCard: React.FC<CoupleCardProps> = ({ names, role, desc, imageSrc, im
           key={idx}
           className={`absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out group-hover:scale-105 ${idx === currentImageIndex ? 'opacity-100 z-0' : 'opacity-0 -z-10'}`}
           style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(13, 12, 16, 0.1) 0%, rgba(22, 20, 29, 0.95) 90%), url(${src})`
+            backgroundImage: `linear-gradient(to bottom, rgba(13, 12, 16, 0.4) 0%, rgba(22, 20, 29, 0.98) 95%), url(${src})`
           }}
         />
       ))}

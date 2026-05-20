@@ -7,7 +7,7 @@ export const SharingSection: React.FC = () => {
   const shareOnWhatsApp = () => {
     const currentUrl = window.location.origin;
     const text = encodeURIComponent(
-      `You are joyfully invited to the wedding celebration of Muhammed Shabin & Sana and Mohammed Sameer & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center. View details & RSVP: ${currentUrl}/`
+      `You are cordially invited to the wedding celebration of Muhammed Shabin & Sana and Mohammed Sameer & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center. View details & RSVP: ${currentUrl}/`
     );
     window.open(`https://wa.me/?text=${text}`, '_blank');
   };
@@ -15,7 +15,7 @@ export const SharingSection: React.FC = () => {
   const shareOnInstagram = async () => {
     const currentUrl = window.location.origin;
     const title = 'Sahakar Family Celebrations';
-    const text = 'You are joyfully invited to the wedding celebration of Muhammed Shabin & Sana and Mohammed Sameer & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center.';
+    const text = 'You are cordially invited to the wedding celebration of Muhammed Shabin & Sana and Mohammed Sameer & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center.';
     
     // 1. Try native Web Share API
     if (navigator.share) {
@@ -110,7 +110,7 @@ export const SharingSection: React.FC = () => {
       >
         <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent mx-auto mb-10" />
         <p className="text-base md:text-lg font-serif text-ivory/60 italic leading-relaxed">
-          "May Allah shower this marriage with mercy, deepen their love, and grant them a lifetime of peace."
+          "May this union be blessed with enduring happiness, mutual respect, and a lifetime of shared success."
         </p>
       </motion.div>
     </section>

@@ -123,8 +123,12 @@ export const RSVPForm: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
         
         {/* Left Column: RSVP Form */}
-        <div className="glass-card p-6 md:p-8 rounded-2xl shadow-2xl relative">
-          <h2 className="text-[9px] tracking-[0.2em] uppercase text-gold/80 mb-6 font-bold">
+        <div className="glass-card p-6 md:p-8 rounded-2xl shadow-2xl relative overflow-hidden">
+          {/* Edge Lighting */}
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-br from-gold/[0.02] via-transparent to-transparent pointer-events-none" />
+          
+          <h2 className="text-[9px] tracking-[0.2em] uppercase text-gold/80 mb-6 font-bold relative z-10">
             Guest Confirmation
           </h2>
 
@@ -275,21 +279,42 @@ export const RSVPForm: React.FC = () => {
         </div>
 
         {/* Right Column: Wishes Wall */}
-        <div className="glass-card p-6 md:p-8 rounded-2xl shadow-2xl h-full flex flex-col min-h-[500px]">
-          <div className="flex items-center gap-3 mb-6 flex-shrink-0">
+        <div className="glass-card p-6 md:p-8 rounded-2xl shadow-2xl h-full flex flex-col min-h-[500px] relative overflow-hidden">
+          {/* Edge Lighting */}
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-bl from-gold/[0.02] via-transparent to-transparent pointer-events-none" />
+
+          <div className="flex items-center gap-3 mb-6 flex-shrink-0 relative z-10">
             <Heart className="w-4 h-4 text-gold/80" />
             <h2 className="text-[9px] tracking-[0.2em] uppercase text-gold/80 font-bold">
-              Wishes & Prayers
+              Wishes & Messages
             </h2>
           </div>
 
           <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
             {displayWishes.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-center opacity-40 py-10">
-                <Heart className="w-8 h-8 mb-4 text-gold/20" />
-                <p className="text-[10px] tracking-widest uppercase font-sans">
-                  Wishes will appear here<br />after RSVPs are submitted
-                </p>
+              <div className="flex flex-col items-center justify-center h-full text-center py-10 relative">
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    opacity: [0.3, 0.6, 0.3]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative mb-6"
+                >
+                  <Heart className="w-12 h-12 text-gold/20" />
+                  <div className="absolute inset-0 bg-gold/10 blur-xl rounded-full" />
+                </motion.div>
+                <div className="space-y-3 opacity-40">
+                  <p className="text-[10px] tracking-[0.3em] uppercase font-sans font-bold text-gold">
+                    Awaiting First Message
+                  </p>
+                  <p className="text-[11px] font-serif italic max-w-[180px] leading-relaxed">
+                    "Your words will light up this wall with best wishes."
+                  </p>
+                </div>
+                {/* Shimmer Effect */}
+                <div className="absolute inset-0 bg-gradient-to-t from-transparent via-gold/[0.02] to-transparent animate-[pulse_6s_infinite] pointer-events-none" />
               </div>
             ) : (
               <AnimatePresence initial={false}>

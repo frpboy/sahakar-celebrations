@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { weddingData } from '../config/wedding';
 
@@ -46,6 +47,28 @@ export const Hero: React.FC = () => {
 
   return (
     <section className="relative min-h-screen w-full flex flex-col items-center justify-center pt-24 pb-32 px-4 overflow-hidden">
+      {/* Cinematic Atmospheric Layers */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* Moving Light Rays */}
+        <div className="absolute top-[-20%] left-[-10%] w-[140%] h-[140%] opacity-20 rotate-[-15deg]">
+          <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,transparent,transparent_40px,rgba(223,186,115,0.05)_45px,transparent_50px)] blur-[30px] animate-[drift_20s_linear_infinite]" />
+        </div>
+        
+        {/* Volumetric Haze */}
+        <div className="absolute inset-0 bg-radial-gradient(circle_at_50%_40%,rgba(223,186,115,0.08),transparent_70%) blur-[100px]" />
+        
+        {/* Layered Depth Motion Blobs */}
+        <motion.div 
+          animate={{ 
+            x: [0, 30, -20, 0],
+            y: [0, -40, 20, 0],
+            scale: [1, 1.1, 0.9, 1]
+          }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[10%] right-[10%] w-[40%] h-[40%] bg-gold/5 blur-[120px] rounded-full"
+        />
+      </div>
+
       <div className="z-20 text-center max-w-4xl w-full mx-auto px-4 mb-12">
         <span ref={welcomeRef} className="text-[10px] md:text-xs tracking-[0.5em] uppercase text-gold mb-6 block font-sans font-bold">
           Sahakar Medical Ventures
