@@ -2,118 +2,118 @@ import React, { createContext, useContext, useEffect, useRef, useState } from 'r
 
 interface MusicContextType {
   isPlaying: boolean;
-  togglePlay: () => void;
+  toggleMusic: () => void;
   playMusic: () => void;
   pauseMusic: () => void;
-  hasInteracted: boolean;
-  setHasInteracted: (val: boolean) => void;
 }
 
 const MusicContext = createContext<MusicContextType | undefined>(undefined);
 
 export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const fadeIntervalRef = useRef<number | null>(null);
+  const volumeIntervalRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // Create audio element with a high-quality ambient luxury track
-    // Using a reliable royalty-free ambient track link
-    const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+    const audio = new Audio('/ambient-luxury.mp3');
     audio.loop = true;
     audio.volume = 0;
     audioRef.current = audio;
 
-    // Visibility change logic to pause/resume audio
+    // Handle visibility/focus changes
     const handleVisibilityChange = () => {
-      if (!audioRef.current || !hasInteracted) return;
-
       if (document.hidden) {
-        // Fade out quickly and pause
-        fadeVolume(0, 500, () => {
-          audioRef.current?.pause();
-          setIsPlaying(false);
-        });
-      } else {
-        // Resume and fade in
-        audioRef.current.play().then(() => {
-          setIsPlaying(true);
-          fadeVolume(0.3, 1500);
-        }).catch((err) => console.log('Audio resume blocked:', err));
+        pauseAudio();
+      } else if (isPlaying) {
+        playAudio();
       }
+    };
+
+    const handleFocus = () => {
+      if (isPlaying) playAudio();
+    };
+
+    const handleBlur = () => {
+      pauseAudio();
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('blur', handleBlur);
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-      if (fadeIntervalRef.current) {
-        clearInterval(fadeIntervalRef.current);
-      }
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('blur', handleBlur);
+      pauseAudio();
+      audioRef.current = null;
     };
-  }, [hasInteracted]);
+  }, [isPlaying]);
 
-  const fadeVolume = (targetVolume: number, durationMs: number, onComplete?: () => void) => {
+  const playAudio = () => {
     if (!audioRef.current) return;
-    if (fadeIntervalRef.current) {
-      clearInterval(fadeIntervalRef.current);
-    }
+    
+    audioRef.current.play().catch(err => console.warn("Autoplay blocked:", err));
+    
+    // Volume Ramping Logic: 0 -> 0.25 -> 0.50 over 7 seconds
+    if (volumeIntervalRef.current) clearInterval(volumeIntervalRef.current);
+    
+    let startTime = Date.now();
+    const duration = 7000; // 7 seconds total
 
-    const startVolume = audioRef.current.volume;
-    const steps = 30;
-    const stepDuration = durationMs / steps;
-    const volumeDelta = (targetVolume - startVolume) / steps;
-    let currentStep = 0;
-
-    fadeIntervalRef.current = window.setInterval(() => {
-      if (!audioRef.current) return;
-      currentStep++;
-      const nextVolume = startVolume + (volumeDelta * currentStep);
-      audioRef.current.volume = Math.max(0, Math.min(0.5, nextVolume));
-
-      if (currentStep >= steps) {
-        if (fadeIntervalRef.current) {
-          clearInterval(fadeIntervalRef.current);
-        }
-        audioRef.current.volume = targetVolume;
-        if (onComplete) onComplete();
+    volumeIntervalRef.current = window.setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      
+      if (elapsed >= duration) {
+        if (audioRef.current) audioRef.current.volume = 0.5;
+        if (volumeIntervalRef.current) clearInterval(volumeIntervalRef.current);
+        return;
       }
-    }, stepDuration);
+
+      // Step-based ramping as requested: 
+      // First 3.5s: 0 to 0.25
+      // Next 3.5s: 0.25 to 0.50
+      if (elapsed < duration / 2) {
+        const progress = elapsed / (duration / 2);
+        if (audioRef.current) audioRef.current.volume = progress * 0.25;
+      } else {
+        const progress = (elapsed - duration / 2) / (duration / 2);
+        if (audioRef.current) audioRef.current.volume = 0.25 + (progress * 0.25);
+      }
+    }, 50);
   };
 
-  const playMusic = () => {
-    if (!audioRef.current) return;
-    audioRef.current.play().then(() => {
-      setIsPlaying(true);
-      fadeVolume(0.3, 2000);
-    }).catch(err => {
-      console.error('Audio play failed:', err);
-    });
+  const pauseAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      if (volumeIntervalRef.current) {
+        clearInterval(volumeIntervalRef.current);
+        volumeIntervalRef.current = null;
+      }
+      audioRef.current.volume = 0;
+    }
   };
 
-  const pauseMusic = () => {
-    if (!audioRef.current) return;
-    fadeVolume(0, 1000, () => {
-      audioRef.current?.pause();
-      setIsPlaying(false);
-    });
-  };
-
-  const togglePlay = () => {
+  const toggleMusic = () => {
     if (isPlaying) {
       pauseMusic();
     } else {
-      setHasInteracted(true);
       playMusic();
     }
   };
 
+  const playMusic = () => {
+    playAudio();
+    setIsPlaying(true);
+  };
+
+  const pauseMusic = () => {
+    pauseAudio();
+    setIsPlaying(false);
+  };
+
   return (
-    <MusicContext.Provider value={{ isPlaying, togglePlay, playMusic, pauseMusic, hasInteracted, setHasInteracted }}>
+    <MusicContext.Provider value={{ isPlaying, toggleMusic, playMusic, pauseMusic }}>
       {children}
     </MusicContext.Provider>
   );
@@ -121,8 +121,6 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 export const useMusic = () => {
   const context = useContext(MusicContext);
-  if (!context) {
-    throw new Error('useMusic must be used within a MusicProvider');
-  }
+  if (!context) throw new Error('useMusic must be used within MusicProvider');
   return context;
 };

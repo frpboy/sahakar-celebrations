@@ -1,8 +1,7 @@
 import React from 'react';
-import { Calendar, MapPin, Tag } from 'lucide-react';
+import { MapPin, Tag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { weddingData } from '../config/wedding';
-import { generateGoogleCalendarUrl } from '../lib/calendar';
 
 interface EventProps {
   title: string;
@@ -11,10 +10,9 @@ interface EventProps {
   location: string;
   dressCode?: string;
   description?: string;
-  googleCalendarUrl: string;
 }
 
-const EventCard: React.FC<EventProps> = ({ title, date, time, location, dressCode, description, googleCalendarUrl }) => {
+const EventCard: React.FC<EventProps> = ({ title, date, time, location, dressCode, description }) => {
   return (
     <motion.div
       initial={{ opacity: 0, x: -30 }}
@@ -32,17 +30,6 @@ const EventCard: React.FC<EventProps> = ({ title, date, time, location, dressCod
             {title}
           </h3>
         </div>
-        
-        {/* Calendar button */}
-        <a
-          href={googleCalendarUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="self-start md:self-center px-4 py-2 border border-gold/20 hover:border-gold text-gold hover:text-obsidian hover:bg-gold transition-all duration-300 rounded-full text-[10px] tracking-widest uppercase font-sans flex items-center gap-2"
-        >
-          <Calendar className="w-3.5 h-3.5" />
-          Add to Calendar
-        </a>
       </div>
 
       {description && (
@@ -75,12 +62,6 @@ export const EventTimeline: React.FC = () => {
       time: weddingData.wedding.time,
       location: weddingData.wedding.venue,
       description: 'Join us for an evening of celebration, love, and a traditional feast as we mark the beginning of our married life.',
-      googleCalendarUrl: generateGoogleCalendarUrl({
-        title: `Wedding Celebration: Shabin & Sana and Sameer & Nihala`,
-        details: `You are joyfully invited to celebrate the matrimonial unions of:\n\nMuhammed Shabin & Sana\nMohammed Sameer Kallangadan & Nihala Jasmin KK\n\nDate: Sunday, July 19, 2026\nTime: 4:30 PM Onwards\nVenue: Shifa Convention Center\n\nVenue Link: https://maps.app.goo.gl/JDr5v3dgUuwPNbnJA\n\nWe look forward to your presence and heartfelt prayers.`,
-        location: `${weddingData.wedding.venue}, ${weddingData.wedding.address}`,
-        startDateIso: weddingData.wedding.date,
-      }),
     },
   ];
 

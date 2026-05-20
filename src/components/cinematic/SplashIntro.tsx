@@ -7,7 +7,7 @@ interface SplashIntroProps {
 }
 
 export const SplashIntro: React.FC<SplashIntroProps> = ({ onEnter }) => {
-  const { playMusic, setHasInteracted } = useMusic();
+  const { playMusic } = useMusic();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const crestRef = useRef<SVGSVGElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement | null>(null);
@@ -36,8 +36,7 @@ export const SplashIntro: React.FC<SplashIntroProps> = ({ onEnter }) => {
   }, []);
 
   const handleEnterClick = () => {
-    // Unlock Web Audio API Context
-    setHasInteracted(true);
+    // Unlock Web Audio API Context and start music
     playMusic();
 
     // GSAP Exit Sequence

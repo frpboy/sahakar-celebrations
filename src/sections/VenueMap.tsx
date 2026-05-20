@@ -1,12 +1,20 @@
 import React from 'react';
-import { MapPin, Navigation, Phone } from 'lucide-react';
+import { MapPin, Navigation, Phone, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { weddingData } from '../config/wedding';
 import { getGoogleMapsQueryEmbedUrl } from '../lib/maps';
+import { generateGoogleCalendarUrl } from '../lib/calendar';
 
 export const VenueMap: React.FC = () => {
   const mapEmbedUrl = getGoogleMapsQueryEmbedUrl(weddingData.wedding.mapEmbedQuery);
   const directionsUrl = weddingData.wedding.mapsUrl;
+
+  const googleCalendarUrl = generateGoogleCalendarUrl({
+    title: `Wedding Celebration: Shabin & Sana and Sameer & Nihala`,
+    details: `You are joyfully invited to celebrate the matrimonial unions of:\n\nMuhammed Shabin & Sana\nMohammed Sameer Kallangadan & Nihala Jasmin KK\n\nDate: Sunday, July 19, 2026\nTime: 4:30 PM Onwards\nVenue: Shifa Convention Center\n\nVenue Link: https://maps.app.goo.gl/JDr5v3dgUuwPNbnJA\n\nWe look forward to your presence and heartfelt prayers.`,
+    location: `${weddingData.wedding.venue}, ${weddingData.wedding.address}`,
+    startDateIso: weddingData.wedding.date,
+  });
 
   return (
     <section className="py-20 px-4 md:px-12 max-w-6xl mx-auto w-full relative z-20">
@@ -48,7 +56,7 @@ export const VenueMap: React.FC = () => {
                   <p className="leading-relaxed">{weddingData.wedding.address}</p>
                 </div>
               </div>
-              
+
               <div className="flex items-start gap-4">
                 <Phone className="w-5 h-5 text-gold/70 shrink-0 mt-1" />
                 <div>
@@ -59,15 +67,25 @@ export const VenueMap: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-10">
+          <div className="flex flex-col sm:flex-row gap-4 mt-12">
             <a
               href={directionsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-4 bg-gold text-obsidian font-sans font-semibold text-xs tracking-[0.25em] uppercase hover:bg-gold-light active:scale-95 transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
+              className="flex-1 bg-gold text-obsidian px-6 py-4 rounded-xl font-sans font-bold text-[10px] tracking-[0.25em] uppercase flex items-center justify-center gap-3 hover:bg-gold-light transition-all duration-300 shadow-lg shadow-gold/10"
             >
-              <Navigation className="w-4 h-4 fill-obsidian" />
+              <Navigation className="w-4 h-4" />
               Navigate to Venue
+            </a>
+            
+            <a
+              href={googleCalendarUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 border border-gold/20 text-gold px-6 py-4 rounded-xl font-sans font-bold text-[10px] tracking-[0.25em] uppercase flex items-center justify-center gap-3 hover:bg-gold/10 transition-all duration-300"
+            >
+              <Calendar className="w-4 h-4" />
+              Add to Calendar
             </a>
           </div>
         </motion.div>
