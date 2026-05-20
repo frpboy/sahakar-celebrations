@@ -47,30 +47,17 @@ export const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 px-4 overflow-hidden">
-      {/* Background ambient gradients */}
-      <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[80%] h-[40%] bg-gold/5 blur-[150px] rounded-full pointer-events-none" />
-
-      {/* Guest greeting node */}
-      <div ref={welcomeRef} className="z-20 text-center mb-6">
-        <span className="text-[10px] md:text-xs tracking-[0.4em] uppercase text-gold font-sans font-medium block mb-2">
-          {inviteType === 'vip' ? '◆ Distinguished Guest Invitation ◆' : '◆ Cordial Invitation ◆'}
+    <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 px-4">
+      <div className="z-20 text-center max-w-4xl px-4">
+        <span ref={welcomeRef} className="text-[10px] md:text-xs tracking-[0.4em] uppercase text-gold mb-4 block font-sans">
+          Sahakar Medical Ventures
         </span>
-        <h2 className="text-xl md:text-3xl font-serif text-ivory tracking-wide max-w-2xl px-4 mx-auto leading-relaxed italic">
-          Welcome, {name}
-        </h2>
-      </div>
-
-      {/* Main Ceremonial Header */}
-      <div ref={titleRef} className="z-20 text-center max-w-4xl px-2 mb-10">
-        <h1 className="text-4xl md:text-7xl font-serif tracking-[0.15em] leading-[1.2] uppercase">
-          <span className="block text-stroke-gold drop-shadow-[0_2px_15px_rgba(223,186,115,0.15)] mb-2 font-black">
-            Sahakar Family
-          </span>
-          <span className="block text-2xl md:text-4xl tracking-[0.3em] font-sans font-light text-gold mt-4">
-            Celebrations
-          </span>
+        <h1 ref={titleRef} className="text-4xl md:text-7xl font-serif text-ivory tracking-[0.15em] mb-8 uppercase leading-tight drop-shadow-2xl">
+          Family <br className="md:hidden" /> Celebrations
         </h1>
+        <h2 className="text-sm md:text-base font-serif text-ivory/80 tracking-wide max-w-2xl px-4 mx-auto leading-relaxed italic mb-12">
+          We cordially invite you to an evening of elegance as we celebrate the matrimonial unions within the Sahakar Family.
+        </h2>
       </div>
 
       {/* Glassmorphic Invitation Summary Card */}
@@ -95,6 +82,11 @@ export const Hero: React.FC = () => {
           <div className="text-center">
             <span className="block text-[10px] tracking-[0.25em] text-gold-dark uppercase mb-1">Date</span>
             <span className="font-serif text-sm tracking-[0.1em] text-ivory">JULY 19, 2026</span>
+          </div>
+          <div className="hidden md:block w-[1px] h-8 bg-gold/20" />
+          <div className="text-center">
+            <span className="block text-[10px] tracking-[0.25em] text-gold-dark uppercase mb-1">Time</span>
+            <span className="font-serif text-sm tracking-[0.1em] text-ivory uppercase">4:30 PM Onwards</span>
           </div>
           <div className="hidden md:block w-[1px] h-8 bg-gold/20" />
           <div className="text-center">

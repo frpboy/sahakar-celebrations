@@ -12,43 +12,37 @@ interface EventProps {
   description?: string;
 }
 
-const EventCard: React.FC<EventProps> = ({ title, date, time, location, dressCode, description }) => {
+const EventCard: React.FC<EventProps> = ({ title, date, time, location, description }) => {
   return (
     <motion.div
       initial={{ opacity: 0, x: -30 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="glass-card glass-card-hover p-6 md:p-8 rounded-2xl relative shadow-xl w-full"
+      className="glass-card glass-card-hover p-5 md:p-6 rounded-xl relative shadow-xl w-full max-w-2xl mx-auto"
     >
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
         <div>
-          <span className="text-[10px] font-sans tracking-[0.25em] text-gold uppercase block mb-1">
+          <span className="text-[9px] font-sans tracking-[0.2em] text-gold uppercase block mb-0.5">
             {date} • {time}
           </span>
-          <h3 className="text-xl md:text-2xl font-serif text-ivory tracking-wide uppercase">
+          <h3 className="text-lg md:text-xl font-serif text-ivory tracking-wider uppercase">
             {title}
           </h3>
         </div>
       </div>
 
       {description && (
-        <p className="text-ivory/70 text-sm font-sans leading-relaxed mb-6 max-w-2xl">
+        <p className="text-ivory/70 text-xs md:text-sm font-sans leading-relaxed mb-4">
           {description}
         </p>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-gold/10 pt-4 text-xs md:text-sm text-ivory/75">
-        <div className="flex items-center gap-3">
-          <MapPin className="w-4 h-4 text-gold/60 shrink-0" />
+      <div className="border-t border-gold/10 pt-3 text-[10px] md:text-xs text-ivory/75">
+        <div className="flex items-center gap-2">
+          <MapPin className="w-3.5 h-3.5 text-gold/60 shrink-0" />
           <span>{location}</span>
         </div>
-        {dressCode && (
-          <div className="flex items-center gap-3">
-            <Tag className="w-4 h-4 text-gold/60 shrink-0" />
-            <span><strong className="text-gold/80">Dress:</strong> {dressCode}</span>
-          </div>
-        )}
       </div>
     </motion.div>
   );
@@ -61,18 +55,18 @@ export const EventTimeline: React.FC = () => {
       date: 'JULY 19, 2026',
       time: weddingData.wedding.time,
       location: weddingData.wedding.venue,
-      description: 'Join us for an evening of celebration, love, and a traditional feast as we mark the beginning of our married life.',
+      description: 'We request the honor of your presence at our Grand Reception as we celebrate this joyous milestone with our esteemed guests and partners.',
     },
   ];
 
   return (
-    <section className="py-20 px-4 md:px-12 max-w-4xl mx-auto w-full relative z-20">
+    <section className="py-16 px-4 md:px-12 max-w-4xl mx-auto w-full relative z-20">
       {/* Title */}
-      <div className="text-center mb-16">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-gold-dark/80 block mb-2">
-          THE TIMELINE OF OUR AUSPICIOUS DAY
+      <div className="text-center mb-10">
+        <span className="text-[9px] tracking-[0.3em] uppercase text-gold-dark/80 block mb-2 font-bold">
+          Official Invitation
         </span>
-        <h2 className="text-3xl md:text-5xl font-serif text-ivory tracking-[0.1em] uppercase">
+        <h2 className="text-2xl md:text-4xl font-serif text-ivory tracking-[0.1em] uppercase">
           Event Schedule
         </h2>
       </div>

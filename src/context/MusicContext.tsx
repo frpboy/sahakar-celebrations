@@ -18,6 +18,12 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const audio = new Audio('/ambient-luxury.mp3');
     audio.loop = true;
     audio.volume = 0;
+    
+    // Add error handling for missing audio source
+    audio.onerror = () => {
+      console.warn("Audio source not found or not supported. Please ensure '/ambient-luxury.mp3' exists in the public folder.");
+    };
+
     audioRef.current = audio;
 
     // Handle visibility/focus changes

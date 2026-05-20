@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Navigation, Phone, Calendar } from 'lucide-react';
+import { MapPin, Navigation, Phone, Calendar, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { weddingData } from '../config/wedding';
 import { getGoogleMapsQueryEmbedUrl } from '../lib/maps';
@@ -17,99 +17,67 @@ export const VenueMap: React.FC = () => {
   });
 
   return (
-    <section className="py-20 px-4 md:px-12 max-w-6xl mx-auto w-full relative z-20">
-      {/* Title */}
-      <div className="text-center mb-16">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-gold-dark/80 block mb-2">
-          WHERE OUR SACRED JOURNEY BEGINS
+    <section className="py-20 px-4 md:px-12 max-w-4xl mx-auto w-full relative z-20">
+      {/* Centered Map Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="glass-card p-8 md:p-12 rounded-[2.5rem] shadow-2xl relative flex flex-col items-center text-center"
+      >
+        {/* Top Icon */}
+        <div className="w-12 h-12 rounded-full border border-gold/20 flex items-center justify-center mb-6 bg-gold/5">
+          <MapPin className="w-5 h-5 text-gold/70" />
+        </div>
+
+        <span className="text-[10px] tracking-[0.3em] uppercase text-gold-dark/80 block mb-2 font-bold">
+          Wedding Location
         </span>
-        <h2 className="text-3xl md:text-5xl font-serif text-ivory tracking-[0.1em] uppercase">
-          The Venue
+        <h2 className="text-3xl md:text-4xl font-serif text-ivory tracking-[0.05em] uppercase mb-2">
+          {weddingData.wedding.venue}
         </h2>
-      </div>
+        <p className="text-ivory/60 text-sm font-sans mb-10 tracking-wide">
+          {weddingData.wedding.address}
+        </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-stretch">
-        {/* Contact & Address panel */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="lg:col-span-2 glass-card p-8 rounded-2xl flex flex-col justify-between shadow-2xl relative"
-        >
-          {/* Accent border */}
-          <div className="absolute top-0 bottom-0 left-0 w-[2px] bg-gradient-to-b from-gold/60 to-transparent" />
-          
-          <div>
-            <span className="text-[10px] font-sans tracking-[0.2em] text-gold uppercase block mb-2">
-              Ceremony Destination
-            </span>
-            <h3 className="text-2xl md:text-3xl font-serif text-ivory tracking-wide mb-6">
-              {weddingData.wedding.venue}
-            </h3>
-            
-            <div className="flex flex-col gap-6 text-sm text-ivory/80">
-              <div className="flex items-start gap-4">
-                <MapPin className="w-5 h-5 text-gold/70 shrink-0 mt-1" />
-                <div>
-                  <p className="font-semibold text-ivory mb-1">Address</p>
-                  <p className="leading-relaxed">{weddingData.wedding.address}</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <Phone className="w-5 h-5 text-gold/70 shrink-0 mt-1" />
-                <div>
-                  <p className="font-semibold text-ivory mb-1">Family Concierge</p>
-                  <p>+91 22 6668 1234</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 mt-12">
-            <a
-              href={directionsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 bg-gold text-obsidian px-6 py-4 rounded-xl font-sans font-bold text-[10px] tracking-[0.25em] uppercase flex items-center justify-center gap-3 hover:bg-gold-light transition-all duration-300 shadow-lg shadow-gold/10"
-            >
-              <Navigation className="w-4 h-4" />
-              Navigate to Venue
-            </a>
-            
-            <a
-              href={googleCalendarUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 border border-gold/20 text-gold px-6 py-4 rounded-xl font-sans font-bold text-[10px] tracking-[0.25em] uppercase flex items-center justify-center gap-3 hover:bg-gold/10 transition-all duration-300"
-            >
-              <Calendar className="w-4 h-4" />
-              Add to Calendar
-            </a>
-          </div>
-        </motion.div>
-
-        {/* Map visualization frame */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="lg:col-span-3 glass-card p-2 rounded-2xl overflow-hidden shadow-2xl h-[350px] lg:h-auto min-h-[350px] relative"
-        >
+        {/* Embedded Map */}
+        <div className="w-full aspect-video rounded-2xl overflow-hidden border border-gold/10 mb-10 shadow-inner">
           <iframe
             src={mapEmbedUrl}
             width="100%"
             height="100%"
-            style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) contrast(110%)' }}
-            allowFullScreen={false}
+            style={{ border: 0, filter: 'invert(90%) hue-rotate(180) brightness(95%) contrast(90%)' }}
+            allowFullScreen={true}
             loading="lazy"
-            title="Google Maps Location Frame"
-            className="rounded-xl"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Venue Map"
           />
-        </motion.div>
-      </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+          <a
+            href={directionsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-gold text-obsidian px-6 py-4 rounded-xl font-sans font-bold text-[10px] tracking-[0.25em] uppercase flex items-center justify-center gap-3 hover:bg-gold-light transition-all duration-300 shadow-lg shadow-gold/10"
+          >
+            <Send className="w-3.5 h-3.5" />
+            Navigate
+          </a>
+          
+          <a
+            href={googleCalendarUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="border border-gold/20 text-gold px-6 py-4 rounded-xl font-sans font-bold text-[10px] tracking-[0.25em] uppercase flex items-center justify-center gap-3 hover:bg-gold/10 transition-all duration-300"
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            Add to Calendar
+          </a>
+        </div>
+      </motion.div>
     </section>
   );
 };

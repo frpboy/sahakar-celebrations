@@ -51,6 +51,7 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   background-image: radial-gradient(circle at 50% 50%, #16141D 0%, #0D0C10 100%);
+  background-attachment: fixed;
 }
 
 ::selection {
