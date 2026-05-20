@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Clock, MapPin, Tag } from 'lucide-react';
+import { Calendar, MapPin, Tag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { weddingData } from '../config/wedding';
 import { generateGoogleCalendarUrl } from '../lib/calendar';

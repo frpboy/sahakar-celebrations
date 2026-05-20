@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Navigation, Phone, Mail } from 'lucide-react';
+import { MapPin, Navigation, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { weddingData } from '../config/wedding';
 import { getGoogleMapsQueryEmbedUrl } from '../lib/maps';

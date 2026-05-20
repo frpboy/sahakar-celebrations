@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, CheckCircle, AlertTriangle, Plus, Minus, Heart, Share2, Instagram } from 'lucide-react';
+import { Send, CheckCircle, AlertTriangle, Plus, Minus, Heart, Share2 } from 'lucide-react';
 
 interface Wish {
   name: string;
@@ -274,9 +274,11 @@ export const RSVPForm: React.FC = () => {
               </button>
               <button
                 onClick={shareOnInstagram}
-                className="flex items-center justify-center gap-3 py-4 px-6 bg-pink-600/5 border border-pink-600/10 text-pink-400 rounded-2xl text-[10px] tracking-widest uppercase font-bold hover:bg-pink-600/10 transition-all duration-300 group"
+                className="flex items-center justify-center gap-3 py-4 px-6 bg-pink-600/5 border border-pink-600/10 text-pink-400 rounded-2xl text-[10px] tracking-widest uppercase font-bold hover:bg-pink-600/20 transition-all duration-300 group"
               >
-                <Instagram className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <div className="w-4 h-4 border border-pink-400 rounded-[4px] flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-2 h-2 border border-pink-400 rounded-full" />
+                </div>
                 Share to Instagram
               </button>
             </div>
