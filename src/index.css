@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-obsidian: #0D0C10;
+  --color-velvet: #16141D;
+  --color-gold-light: #F2D794;
+  --color-gold: #DFBA73;
+  --color-gold-dark: #A48F65;
+  --color-ivory: #F5F3EF;
+  --color-crimson: #7D2235;
+
+  --font-serif: "Cinzel", "Playfair Display", serif;
+  --font-sans: "Inter", "Montserrat", sans-serif;
+
+  --background-image-gold-gradient: linear-gradient(135deg, #DFBA73 0%, #A48F65 50%, #DFBA73 100%);
+  --background-image-dark-gradient: radial-gradient(circle at center, #16141D 0%, #0D0C10 100%);
+}
+
+@utility text-stroke-gold {
+  -webkit-text-stroke: 1px rgba(223, 186, 115, 0.4);
+  color: transparent;
+}
+
+@utility gold-gradient-text {
+  background: linear-gradient(135deg, #F2D794 0%, #DFBA73 50%, #A48F65 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility glass-card {
+  background: rgba(22, 20, 29, 0.65);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(223, 186, 115, 0.12);
+}
+
+@utility glass-card-hover {
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  &:hover {
+    background: rgba(22, 20, 29, 0.85);
+    border-color: rgba(223, 186, 115, 0.3);
+    box-shadow: 0 0 25px rgba(223, 186, 115, 0.1);
+  }
+}
+
+body {
+  background-color: var(--color-obsidian);
+  color: var(--color-ivory);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(circle at 50% 50%, #16141D 0%, #0D0C10 100%);
+}
+
+::selection {
+  background-color: var(--color-gold);
+  color: var(--color-obsidian);
+}
+
+/* Lenis Scroll Rules */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overflow: clip;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Custom Luxury Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0D0C10;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #DFBA73 0%, #A48F65 100%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #DFBA73;
+}
+
+/* Keyframes */
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
