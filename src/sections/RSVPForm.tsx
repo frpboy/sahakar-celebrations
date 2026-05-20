@@ -33,11 +33,14 @@ export const RSVPForm: React.FC = () => {
       const response = await fetch('/api/rsvp');
       const result = await response.json();
       if (result.success) {
-        // Convert status to uppercase for the UI
-        const formattedData = result.data.map((item: any) => ({
-          ...item,
-          status: item.attendance === 'attending' ? 'ATTENDING' : 'DECLINED'
-        }));
+        // Condition: Filter to show ONLY entries that have a message/wish
+        // and ensure we display the most recent ones first (handled by DB, but safe to verify here)
+        const formattedData = result.data
+          .filter((item: any) => item.message && item.message.trim() !== '')
+          .map((item: any) => ({
+            ...item,
+            status: item.attendance === 'attending' ? 'ATTENDING' : 'DECLINED'
+          }));
         setDisplayWishes(formattedData);
       }
     } catch (err) {
@@ -272,44 +275,56 @@ export const RSVPForm: React.FC = () => {
         </div>
 
         {/* Right Column: Wishes Wall */}
-        <div className="glass-card p-6 md:p-8 rounded-2xl shadow-2xl h-full flex flex-col">
-          <div className="flex items-center gap-3 mb-6">
+        <div className="glass-card p-6 md:p-8 rounded-2xl shadow-2xl h-full flex flex-col min-h-[500px]">
+          <div className="flex items-center gap-3 mb-6 flex-shrink-0">
             <Heart className="w-4 h-4 text-gold/80" />
             <h2 className="text-[9px] tracking-[0.2em] uppercase text-gold/80 font-bold">
               Wishes & Prayers
             </h2>
           </div>
 
-          <div className="flex flex-col gap-4 overflow-y-auto max-h-[500px] pr-2 custom-scrollbar">
-            {displayWishes.map((wish, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                className="bg-ivory/[0.03] border border-gold/5 rounded-xl p-5 hover:bg-ivory/[0.05] transition-colors group"
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2.5 h-2.5 rounded-full border border-gold/40 flex items-center justify-center">
-                    <div className="w-1 h-1 bg-gold rounded-full" />
-                  </div>
-                  <span className="text-[8px] font-bold tracking-[0.1em] text-gold uppercase">
-                    {wish.status}
-                  </span>
-                </div>
-                <p className="text-xs md:text-sm text-ivory/80 italic font-serif leading-relaxed mb-3 group-hover:text-ivory transition-colors">
-                  "{wish.message}"
+          <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+            {displayWishes.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-center opacity-40 py-10">
+                <Heart className="w-8 h-8 mb-4 text-gold/20" />
+                <p className="text-[10px] tracking-widest uppercase font-sans">
+                  Wishes will appear here<br />after RSVPs are submitted
                 </p>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-[1px] bg-gold/30" />
-                  <span className="text-[9px] font-sans tracking-wide text-gold/70">— {wish.name}</span>
-                </div>
-              </motion.div>
-            ))}
+              </div>
+            ) : (
+              <AnimatePresence initial={false}>
+                {displayWishes.map((wish, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-ivory/[0.03] border border-gold/10 rounded-xl p-5 hover:bg-ivory/[0.05] transition-all duration-300 group shadow-sm overflow-hidden"
+                  >
+                    <div className="flex items-center gap-2 mb-2.5">
+                      <span className={`text-[8px] font-black tracking-[0.15em] uppercase px-2 py-0.5 rounded-full border ${
+                        wish.status === 'ATTENDING' 
+                          ? 'text-emerald-500 border-emerald-500/20 bg-emerald-500/5' 
+                          : 'text-ivory/30 border-ivory/10 bg-ivory/5'
+                      }`}>
+                        {wish.status === 'ATTENDING' ? 'Attending' : 'Unable to Attend'}
+                      </span>
+                    </div>
+                    <p className="text-sm md:text-base text-ivory/80 italic font-serif leading-relaxed mb-4 group-hover:text-ivory transition-colors break-words">
+                      &ldquo;{wish.message}&rdquo;
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <div className="w-6 h-[1px] bg-gold/20" />
+                      <span className="text-[10px] font-sans tracking-widest text-gold font-bold uppercase">— {wish.name}</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            )}
           </div>
 
-          <div className="mt-auto pt-6 text-center">
-            <p className="text-[8px] text-gold-dark/40 tracking-[0.2em] uppercase italic">
+          <div className="mt-auto pt-8 text-center flex-shrink-0">
+            <div className="w-12 h-[1px] bg-gold/10 mx-auto mb-4" />
+            <p className="text-[8px] text-gold-dark/40 tracking-[0.3em] uppercase italic font-medium">
               Sharing the love of family & friends
             </p>
           </div>
