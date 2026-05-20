@@ -19,6 +19,8 @@ Detailed specifications and implementation details are divided into the followin
    * Formulates Neon serverless PostgreSQL SQL definitions (DDL queries), indices, unique key constraints, Drizzle ORM model schemas, and API REST specs.
 6. **[Implementation Plan](file:///e:/K4NN4N/sahakar-celebrations/docs/Implementation_Plan.md)**
    * Formulates a step-by-step 7-phase timeline covering bootstrapping local scripts, implementing GSAP effects, deploying SQL tables, routing API dispatches, and deploying to Vercel.
+7. **[Project Changelog](file:///e:/K4NN4N/sahakar-celebrations/docs/CHANGELOG.md)**
+   * Tracks all project modifications, layout updates, and release versions.
 
 ---
 

@@ -1,17 +1,20 @@
 import React from 'react';
 import { Calendar, Clock, MapPin, Tag } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { weddingData } from '../config/wedding';
+import { generateGoogleCalendarUrl } from '../lib/calendar';
 
 interface EventProps {
   title: string;
   date: string;
   time: string;
   location: string;
-  dressCode: string;
+  dressCode?: string;
+  description?: string;
   googleCalendarUrl: string;
 }
 
-const EventCard: React.FC<EventProps> = ({ title, date, time, location, dressCode, googleCalendarUrl }) => {
+const EventCard: React.FC<EventProps> = ({ title, date, time, location, dressCode, description, googleCalendarUrl }) => {
   return (
     <motion.div
       initial={{ opacity: 0, x: -30 }}
@@ -23,9 +26,9 @@ const EventCard: React.FC<EventProps> = ({ title, date, time, location, dressCod
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <span className="text-[10px] font-sans tracking-[0.25em] text-gold uppercase block mb-1">
-            {date}
+            {date} • {time}
           </span>
-          <h3 className="text-xl md:text-2xl font-serif text-ivory tracking-wide">
+          <h3 className="text-xl md:text-2xl font-serif text-ivory tracking-wide uppercase">
             {title}
           </h3>
         </div>
@@ -42,19 +45,23 @@ const EventCard: React.FC<EventProps> = ({ title, date, time, location, dressCod
         </a>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-gold/10 pt-4 text-xs md:text-sm text-ivory/75">
-        <div className="flex items-center gap-3">
-          <Clock className="w-4 h-4 text-gold/60 shrink-0" />
-          <span>{time}</span>
-        </div>
+      {description && (
+        <p className="text-ivory/70 text-sm font-sans leading-relaxed mb-6 max-w-2xl">
+          {description}
+        </p>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-gold/10 pt-4 text-xs md:text-sm text-ivory/75">
         <div className="flex items-center gap-3">
           <MapPin className="w-4 h-4 text-gold/60 shrink-0" />
           <span>{location}</span>
         </div>
-        <div className="flex items-center gap-3">
-          <Tag className="w-4 h-4 text-gold/60 shrink-0" />
-          <span><strong className="text-gold/80">Dress:</strong> {dressCode}</span>
-        </div>
+        {dressCode && (
+          <div className="flex items-center gap-3">
+            <Tag className="w-4 h-4 text-gold/60 shrink-0" />
+            <span><strong className="text-gold/80">Dress:</strong> {dressCode}</span>
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -63,36 +70,17 @@ const EventCard: React.FC<EventProps> = ({ title, date, time, location, dressCod
 export const EventTimeline: React.FC = () => {
   const events = [
     {
-      title: 'Welcome Shubh Aagman Brunch',
-      date: 'SATURDAY, OCTOBER 24, 2026',
-      time: '11:00 AM onwards',
-      location: 'The Palm Court, Sahakar Palace',
-      dressCode: 'Royal Pastel Ethnic / Casual Smart',
-      googleCalendarUrl: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Welcome+Shubh+Aagman+Brunch+-+Sahakar+Celebrations&dates=20261024T053000Z/20261024T083000Z&details=Inaugural+brunch+welcoming+guests+for+the+Sahakar+Celebrations.&location=The+Palm+Court,+Sahakar+Palace',
-    },
-    {
-      title: 'Sangeet & Cocktail Soiree',
-      date: 'SATURDAY, OCTOBER 24, 2026',
-      time: '07:00 PM onwards',
-      location: 'Grand Ballroom, Sahakar Palace',
-      dressCode: 'Glitz & Glamour Indowestern',
-      googleCalendarUrl: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Sangeet+%26+Cocktail+Soiree+-+Sahakar+Celebrations&dates=20261024T133000Z/20261024T173000Z&details=An+evening+of+music,+dance,+and+toasts.&location=Grand+Ballroom,+Sahakar+Palace',
-    },
-    {
-      title: 'Manglik Haldi & Mehendi Utsav',
-      date: 'SUNDAY, OCTOBER 25, 2026',
-      time: '10:00 AM onwards',
-      location: 'Royal Gardens, Sahakar Palace',
-      dressCode: 'Traditional Yellow / Festive Floral',
-      googleCalendarUrl: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Haldi+%26+Mehendi+Utsav+-+Sahakar+Celebrations&dates=20261025T043000Z/20261025T083000Z&details=Traditional+Haldi+and+Mehendi+ceremonies.&location=Royal+Gardens,+Sahakar+Palace',
-    },
-    {
-      title: 'Grand Matrimonial Reception Feast',
-      date: 'MONDAY, OCTOBER 26, 2026',
-      time: '07:30 PM onwards',
-      location: 'The Palace lawns, Sahakar Palace',
-      dressCode: 'Royal Formal Ethnic / Black Tie',
-      googleCalendarUrl: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Grand+Matrimonial+Reception+-+Sahakar+Celebrations&dates=20261026T140000Z/20261026T180000Z&details=The+reception+dinner+in+honor+of+the+couples.&location=Palace+lawns,+Sahakar+Palace',
+      title: 'Grand Reception',
+      date: 'JULY 19, 2026',
+      time: weddingData.wedding.time,
+      location: weddingData.wedding.venue,
+      description: 'Join us for an evening of celebration, love, and a traditional feast as we mark the beginning of our married life.',
+      googleCalendarUrl: generateGoogleCalendarUrl({
+        title: `Wedding Celebration: Shabin & Sana and Sameer & Nihala`,
+        details: `You are joyfully invited to celebrate the matrimonial unions of:\n\nMuhammed Shabin & Sana\nMohammed Sameer Kallangadan & Nihala Jasmin KK\n\nDate: Sunday, July 19, 2026\nTime: 4:30 PM Onwards\nVenue: Shifa Convention Center\n\nVenue Link: https://maps.app.goo.gl/JDr5v3dgUuwPNbnJA\n\nWe look forward to your presence and heartfelt prayers.`,
+        location: `${weddingData.wedding.venue}, ${weddingData.wedding.address}`,
+        startDateIso: weddingData.wedding.date,
+      }),
     },
   ];
 
@@ -101,13 +89,13 @@ export const EventTimeline: React.FC = () => {
       {/* Title */}
       <div className="text-center mb-16">
         <span className="text-[10px] tracking-[0.3em] uppercase text-gold-dark/80 block mb-2">
-          SCHEDULE
+          THE TIMELINE OF OUR AUSPICIOUS DAY
         </span>
         <h2 className="text-3xl md:text-5xl font-serif text-ivory tracking-[0.1em] uppercase">
-          Celebration Timeline
+          Event Schedule
         </h2>
-        <div className="w-12 h-[1px] bg-gold mx-auto mt-4" />
       </div>
+
 
       {/* Events layout */}
       <div className="flex flex-col gap-6 relative">

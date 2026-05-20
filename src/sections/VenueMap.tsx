@@ -1,22 +1,23 @@
 import React from 'react';
 import { MapPin, Navigation, Phone, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { weddingData } from '../config/wedding';
+import { getGoogleMapsQueryEmbedUrl } from '../lib/maps';
 
 export const VenueMap: React.FC = () => {
-  const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.802907409278!2d72.82276587602058!3d19.02844285348825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7cec76ffffff9%3A0xcd50f4a7c06eb70d!2sTaj%20Lands%20End%2C%20Mumbai!5e0!3m2!1sen!2sin!4v1716200000000!5m2!1sen!2sin";
-  const directionsUrl = "https://maps.app.goo.gl/tBwG2rZ7u5Z8Z6X99"; // Example coordinates redirection link
+  const mapEmbedUrl = getGoogleMapsQueryEmbedUrl(weddingData.wedding.mapEmbedQuery);
+  const directionsUrl = weddingData.wedding.mapsUrl;
 
   return (
     <section className="py-20 px-4 md:px-12 max-w-6xl mx-auto w-full relative z-20">
       {/* Title */}
       <div className="text-center mb-16">
         <span className="text-[10px] tracking-[0.3em] uppercase text-gold-dark/80 block mb-2">
-          LOCATION
+          WHERE OUR SACRED JOURNEY BEGINS
         </span>
         <h2 className="text-3xl md:text-5xl font-serif text-ivory tracking-[0.1em] uppercase">
           The Venue
         </h2>
-        <div className="w-12 h-[1px] bg-gold mx-auto mt-4" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-stretch">
@@ -36,7 +37,7 @@ export const VenueMap: React.FC = () => {
               Ceremony Destination
             </span>
             <h3 className="text-2xl md:text-3xl font-serif text-ivory tracking-wide mb-6">
-              Sahakar Palace & Gardens
+              {weddingData.wedding.venue}
             </h3>
             
             <div className="flex flex-col gap-6 text-sm text-ivory/80">
@@ -44,7 +45,7 @@ export const VenueMap: React.FC = () => {
                 <MapPin className="w-5 h-5 text-gold/70 shrink-0 mt-1" />
                 <div>
                   <p className="font-semibold text-ivory mb-1">Address</p>
-                  <p className="leading-relaxed">Lands End, Bandra West, Mumbai, Maharashtra 400050</p>
+                  <p className="leading-relaxed">{weddingData.wedding.address}</p>
                 </div>
               </div>
               
@@ -53,14 +54,6 @@ export const VenueMap: React.FC = () => {
                 <div>
                   <p className="font-semibold text-ivory mb-1">Family Concierge</p>
                   <p>+91 22 6668 1234</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <Mail className="w-5 h-5 text-gold/70 shrink-0 mt-1" />
-                <div>
-                  <p className="font-semibold text-ivory mb-1">RSVP Enquiries</p>
-                  <p>celebrations@sahakar.com</p>
                 </div>
               </div>
             </div>

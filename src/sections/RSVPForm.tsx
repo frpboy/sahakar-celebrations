@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Users, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Send, CheckCircle, AlertTriangle, Plus, Minus, Heart, Share2, Instagram } from 'lucide-react';
+
+interface Wish {
+  name: string;
+  message: string;
+  status: 'ATTENDING' | 'DECLINED';
+}
 
 export const RSVPForm: React.FC = () => {
   const [formData, setFormData] = useState({
     fullName: '',
-    email: '',
-    phone: '',
     attendance: 'attending',
     guestCount: 1,
-    dietaryNotes: '',
+    wishes: '',
     honeypot: '', // anti-spam
   });
 
@@ -17,56 +21,61 @@ export const RSVPForm: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
 
+  // Dynamic wishes from database
+  const [displayWishes, setDisplayWishes] = useState<Wish[]>([]);
+
+  useEffect(() => {
+    fetchWishes();
+  }, []);
+
+  const fetchWishes = async () => {
+    try {
+      const response = await fetch('/api/rsvp');
+      const result = await response.json();
+      if (result.success) {
+        // Convert status to uppercase for the UI
+        const formattedData = result.data.map((item: any) => ({
+          ...item,
+          status: item.attendance === 'attending' ? 'ATTENDING' : 'DECLINED'
+        }));
+        setDisplayWishes(formattedData);
+      }
+    } catch (err) {
+      console.error('Failed to fetch wishes:', err);
+    }
+  };
+
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
-
     if (!formData.fullName.trim()) {
-      newErrors.fullName = 'Full Name is required';
-    } else if (formData.fullName.length < 2) {
-      newErrors.fullName = 'Name must be at least 2 characters';
+      newErrors.fullName = 'Your full name is required';
     }
-
-    if (formData.email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.email)) {
-        newErrors.email = 'Please enter a valid email address';
-      }
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-    } else if (formData.phone.length < 8) {
-      newErrors.phone = 'Please enter a valid phone number';
-    }
-
-    if (formData.attendance === 'attending') {
-      if (formData.guestCount < 1 || formData.guestCount > 10) {
-        newErrors.guestCount = 'Guest count must be between 1 and 10';
-      }
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'guestCount' ? parseInt(value) || 1 : value,
-    }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+  };
+
+  const incrementGuests = () => {
+    if (formData.guestCount < 10) {
+      setFormData(prev => ({ ...prev, guestCount: prev.guestCount + 1 }));
+    }
+  };
+
+  const decrementGuests = () => {
+    if (formData.guestCount > 1) {
+      setFormData(prev => ({ ...prev, guestCount: prev.guestCount - 1 }));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-
-    // Honeypot check
     if (formData.honeypot) {
-      // Act like it succeeded to fool spam bots
       setSubmitStatus('success');
       return;
     }
@@ -82,11 +91,9 @@ export const RSVPForm: React.FC = () => {
         },
         body: JSON.stringify({
           fullName: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
           attendance: formData.attendance,
           guestCount: formData.attendance === 'attending' ? formData.guestCount : 0,
-          dietaryNotes: formData.dietaryNotes,
+          wishes: formData.wishes,
         }),
       });
 
@@ -94,225 +101,253 @@ export const RSVPForm: React.FC = () => {
 
       if (response.ok && result.success) {
         setSubmitStatus('success');
+        // Refresh the wishes wall
+        fetchWishes();
       } else {
-        throw new Error(result.message || 'Something went wrong. Please try again.');
+        throw new Error(result.message || 'Something went wrong.');
       }
-    } catch (err: any) {
-      console.warn('API connection failed. Running in mock demonstration mode.', err);
-      // Fallback/Mock success for demonstration purposes if local backend is unconfigured
-      setTimeout(() => {
-        setSubmitStatus('success');
-      }, 1500);
+    } catch (err) {
+      setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const shareOnWhatsApp = () => {
+    const currentUrl = window.location.origin;
+    const text = encodeURIComponent(
+      `You are joyfully invited to the wedding celebration of Muhammed Shabin & Sana and Mohammed Sameer & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center. View details & RSVP: ${currentUrl}/`
+    );
+    window.open(`https://wa.me/?text=${text}`, '_blank');
+  };
+
+  const shareOnInstagram = () => {
+    // Instagram doesn't have a direct "share text" API like WhatsApp, 
+    // but we can copy to clipboard and alert the user or redirect to profile
+    const shareUrl = window.location.origin + '/';
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      alert('Link copied to clipboard! You can now share it in your Instagram Story or Bio.');
+      window.open('https://www.instagram.com/', '_blank');
+    });
+  };
+
   return (
-    <section className="py-20 px-4 md:px-12 max-w-xl mx-auto w-full relative z-20">
-      {/* Title */}
-      <div className="text-center mb-12">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-gold-dark/80 block mb-2">
-          CONFIRMATION
-        </span>
-        <h2 className="text-3xl md:text-5xl font-serif text-ivory tracking-[0.1em] uppercase">
-          RSVP
-        </h2>
-        <div className="w-12 h-[1px] bg-gold mx-auto mt-4" />
-      </div>
+    <section className="py-20 px-4 md:px-12 max-w-6xl mx-auto w-full relative z-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+        
+        {/* Left Column: RSVP Form */}
+        <div className="glass-card p-8 md:p-10 rounded-[2rem] shadow-2xl relative">
+          <h2 className="text-[10px] tracking-[0.3em] uppercase text-gold/80 mb-8 font-semibold">
+            RSVP Confirmation
+          </h2>
 
-      <div className="glass-card p-8 md:p-10 rounded-3xl shadow-2xl relative">
-        {/* Anti-spam honeypot field (hidden from view) */}
-        <input
-          type="text"
-          name="honeypot"
-          value={formData.honeypot}
-          onChange={handleInputChange}
-          className="absolute opacity-0 pointer-events-none h-0 w-0"
-          tabIndex={-1}
-          autoComplete="off"
-        />
+          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+            {/* Name Input */}
+            <div className="flex flex-col">
+              <label className="text-[9px] font-sans tracking-[0.2em] uppercase text-gold-dark/60 mb-3 font-bold">
+                Your Name
+              </label>
+              <input
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                placeholder="Your full name"
+                className="bg-obsidian/40 border border-gold/10 focus:border-gold/40 py-3.5 px-5 text-sm text-ivory outline-none transition-all duration-300 rounded-2xl placeholder:text-ivory/20"
+              />
+              {errors.fullName && (
+                <span className="text-[9px] text-crimson mt-2 font-sans flex items-center gap-1 uppercase tracking-wider">
+                  <AlertTriangle className="w-3 h-3" /> {errors.fullName}
+                </span>
+              )}
+            </div>
 
-        <AnimatePresence mode="wait">
-          {submitStatus === 'success' ? (
-            <motion.div
-              key="success"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-center py-10"
+            {/* Attendance Toggle */}
+            <div className="flex flex-col">
+              <label className="text-[9px] font-sans tracking-[0.2em] uppercase text-gold-dark/60 mb-3 font-bold">
+                Will you be attending?
+              </label>
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  type="button"
+                  onClick={() => setFormData(prev => ({ ...prev, attendance: 'attending' }))}
+                  className={`py-4 rounded-2xl text-[10px] tracking-widest uppercase transition-all duration-500 font-bold border flex items-center justify-center gap-2 ${
+                    formData.attendance === 'attending'
+                      ? 'bg-gold text-obsidian border-gold shadow-[0_8px_20px_rgba(223,186,115,0.2)]'
+                      : 'border-gold/10 text-ivory/40 hover:border-gold/30'
+                  }`}
+                >
+                  {formData.attendance === 'attending' && <CheckCircle className="w-3.5 h-3.5" />}
+                  Joyfully Accepts
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData(prev => ({ ...prev, attendance: 'declined' }))}
+                  className={`py-4 rounded-2xl text-[10px] tracking-widest uppercase transition-all duration-500 font-bold border flex items-center justify-center gap-2 ${
+                    formData.attendance === 'declined'
+                      ? 'bg-gold text-obsidian border-gold shadow-[0_8px_20px_rgba(223,186,115,0.2)]'
+                      : 'border-gold/10 text-ivory/40 hover:border-gold/30'
+                  }`}
+                >
+                  {formData.attendance === 'declined' && <Plus className="w-3.5 h-3.5 rotate-45" />}
+                  Regretfully Declines
+                </button>
+              </div>
+            </div>
+
+            {/* Guest Counter */}
+            <AnimatePresence>
+              {formData.attendance === 'attending' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex flex-col"
+                >
+                  <label className="text-[9px] font-sans tracking-[0.2em] uppercase text-gold-dark/60 mb-3 font-bold">
+                    Number of Guests
+                  </label>
+                  <div className="flex items-center gap-6 bg-obsidian/40 border border-gold/10 rounded-2xl p-2 w-fit">
+                    <button
+                      type="button"
+                      onClick={decrementGuests}
+                      className="w-10 h-10 rounded-xl flex items-center justify-center border border-gold/10 text-gold hover:bg-gold/10 transition-colors"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="text-xl font-serif text-ivory w-8 text-center">{formData.guestCount}</span>
+                    <button
+                      type="button"
+                      onClick={incrementGuests}
+                      className="w-10 h-10 rounded-xl flex items-center justify-center border border-gold/10 text-gold hover:bg-gold/10 transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Message/Wishes */}
+            <div className="flex flex-col">
+              <label className="text-[9px] font-sans tracking-[0.2em] uppercase text-gold-dark/60 mb-3 font-bold">
+                Blessing / Message <span className="lowercase font-normal opacity-60">(optional)</span>
+              </label>
+              <textarea
+                name="wishes"
+                value={formData.wishes}
+                onChange={handleInputChange}
+                placeholder="Write your heartfelt wishes..."
+                className="bg-obsidian/40 border border-gold/10 focus:border-gold/40 p-5 text-sm text-ivory outline-none transition-all duration-300 rounded-[1.5rem] resize-none min-h-[140px] placeholder:text-ivory/20"
+              />
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full py-5 bg-gold text-obsidian font-sans font-black text-[11px] tracking-[0.3em] uppercase hover:bg-gold-light active:scale-[0.98] transition-all duration-500 rounded-2xl flex items-center justify-center gap-3 shadow-[0_10px_25px_rgba(223,186,115,0.15)]"
             >
-              <CheckCircle className="w-16 h-16 text-gold mx-auto mb-6 drop-shadow-[0_0_10px_rgba(223,186,115,0.4)]" />
-              <h3 className="text-2xl font-serif text-ivory tracking-wide mb-4">
-                Thank You
-              </h3>
-              <p className="text-ivory/80 text-sm leading-relaxed mb-6">
-                Your response has been captured. We look forward to celebrating these auspicious moments with you.
-              </p>
-              <div className="w-12 h-[1px] bg-gold/30 mx-auto" />
-            </motion.div>
-          ) : (
-            <motion.form
-              key="form"
-              onSubmit={handleSubmit}
-              className="flex flex-col gap-6"
-            >
-              {/* Full Name */}
-              <div className="flex flex-col">
-                <label className="text-[10px] font-sans tracking-widest uppercase text-gold/80 mb-2 font-medium">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  placeholder="e.g. John Doe"
-                  className="bg-obsidian/60 border-b border-gold/20 focus:border-gold py-2 px-3 text-sm text-ivory outline-none transition-colors duration-300 rounded-t"
-                />
-                {errors.fullName && (
-                  <span className="text-[10px] text-crimson mt-1 font-sans flex items-center gap-1">
-                    <AlertTriangle className="w-3 h-3" /> {errors.fullName}
-                  </span>
-                )}
-              </div>
+              {isSubmitting ? (
+                <span className="w-5 h-5 border-2 border-obsidian border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <>
+                  <Send className="w-4 h-4" />
+                  Send RSVP
+                </>
+              )}
+            </button>
+          </form>
 
-              {/* Email Address */}
-              <div className="flex flex-col">
-                <label className="text-[10px] font-sans tracking-widest uppercase text-gold/80 mb-2 font-medium">
-                  Email Address (Optional)
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="e.g. john@example.com"
-                  className="bg-obsidian/60 border-b border-gold/20 focus:border-gold py-2 px-3 text-sm text-ivory outline-none transition-colors duration-300 rounded-t"
-                />
-                {errors.email && (
-                  <span className="text-[10px] text-crimson mt-1 font-sans flex items-center gap-1">
-                    <AlertTriangle className="w-3 h-3" /> {errors.email}
-                  </span>
-                )}
-              </div>
-
-              {/* Phone Number */}
-              <div className="flex flex-col">
-                <label className="text-[10px] font-sans tracking-widest uppercase text-gold/80 mb-2 font-medium">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  placeholder="e.g. +91 98765 43210"
-                  className="bg-obsidian/60 border-b border-gold/20 focus:border-gold py-2 px-3 text-sm text-ivory outline-none transition-colors duration-300 rounded-t"
-                />
-                {errors.phone && (
-                  <span className="text-[10px] text-crimson mt-1 font-sans flex items-center gap-1">
-                    <AlertTriangle className="w-3 h-3" /> {errors.phone}
-                  </span>
-                )}
-              </div>
-
-              {/* Attendance Toggle */}
-              <div className="flex flex-col">
-                <label className="text-[10px] font-sans tracking-widest uppercase text-gold/80 mb-2 font-medium">
-                  Will you attend?
-                </label>
-                <div className="grid grid-cols-2 gap-4 mt-1">
-                  <button
-                    type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, attendance: 'attending' }))}
-                    className={`py-3 rounded-xl text-xs tracking-widest uppercase transition-all duration-300 font-sans border ${
-                      formData.attendance === 'attending'
-                        ? 'bg-gold text-obsidian border-gold font-semibold shadow-[0_0_12px_rgba(223,186,115,0.3)]'
-                        : 'border-gold/20 text-ivory/60 hover:border-gold/50'
-                    }`}
-                  >
-                    Accepts With Pleasure
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, attendance: 'declined' }))}
-                    className={`py-3 rounded-xl text-xs tracking-widest uppercase transition-all duration-300 font-sans border ${
-                      formData.attendance === 'declined'
-                        ? 'bg-gold text-obsidian border-gold font-semibold shadow-[0_0_12px_rgba(223,186,115,0.3)]'
-                        : 'border-gold/20 text-ivory/60 hover:border-gold/50'
-                    }`}
-                  >
-                    Declines With Regret
-                  </button>
-                </div>
-              </div>
-
-              {/* Guest Count (conditional) */}
-              <AnimatePresence>
-                {formData.attendance === 'attending' && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="flex flex-col pt-2">
-                      <label className="text-[10px] font-sans tracking-widest uppercase text-gold/80 mb-2 font-medium flex items-center gap-2">
-                        <Users className="w-3.5 h-3.5" /> Total Guests (Including you)
-                      </label>
-                      <input
-                        type="number"
-                        name="guestCount"
-                        min="1"
-                        max="10"
-                        value={formData.guestCount}
-                        onChange={handleInputChange}
-                        className="bg-obsidian/60 border-b border-gold/20 focus:border-gold py-2 px-3 text-sm text-ivory outline-none transition-colors duration-300 rounded-t"
-                      />
-                      {errors.guestCount && (
-                        <span className="text-[10px] text-crimson mt-1 font-sans flex items-center gap-1">
-                          <AlertTriangle className="w-3 h-3" /> {errors.guestCount}
-                        </span>
-                      )}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Dietary / Special Notes */}
-              <div className="flex flex-col">
-                <label className="text-[10px] font-sans tracking-widest uppercase text-gold/80 mb-2 font-medium">
-                  Dietary Preferences / Notes (Optional)
-                </label>
-                <textarea
-                  name="dietaryNotes"
-                  value={formData.dietaryNotes}
-                  onChange={handleInputChange}
-                  placeholder="e.g. Jain food, wheel-chair accessibility requirement, etc."
-                  rows={3}
-                  className="bg-obsidian/60 border border-gold/20 focus:border-gold p-3 text-sm text-ivory outline-none transition-colors duration-300 rounded-xl resize-none"
-                />
-              </div>
-
-              {/* Submit Button */}
+          {/* Sharing Section - Directly after the form */}
+          <div className="mt-12 pt-8 border-t border-gold/10">
+            <h2 className="text-[9px] tracking-[0.2em] uppercase text-gold/60 font-bold mb-6 text-center">
+              Invite Others to the Celebration
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full mt-4 py-4 bg-gold text-obsidian font-sans font-bold text-xs tracking-[0.3em] uppercase hover:bg-gold-light disabled:bg-gold-dark/40 disabled:text-ivory/50 disabled:cursor-not-allowed transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
+                onClick={shareOnWhatsApp}
+                className="flex items-center justify-center gap-3 py-4 px-6 bg-emerald-600/5 border border-emerald-600/10 text-emerald-400 rounded-2xl text-[10px] tracking-widest uppercase font-bold hover:bg-emerald-600/10 transition-all duration-300 group"
               >
-                {isSubmitting ? (
-                  <span className="w-4 h-4 border-2 border-obsidian border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <>
-                    <Send className="w-4.5 h-4.5" />
-                    Submit Response
-                  </>
-                )}
+                <Share2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                Share on WhatsApp
               </button>
-            </motion.form>
-          )}
-        </AnimatePresence>
+              <button
+                onClick={shareOnInstagram}
+                className="flex items-center justify-center gap-3 py-4 px-6 bg-pink-600/5 border border-pink-600/10 text-pink-400 rounded-2xl text-[10px] tracking-widest uppercase font-bold hover:bg-pink-600/10 transition-all duration-300 group"
+              >
+                <Instagram className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                Share to Instagram
+              </button>
+            </div>
+          </div>
+
+          {/* Success Overlay */}
+          <AnimatePresence>
+            {submitStatus === 'success' && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="absolute inset-0 z-30 bg-obsidian/95 backdrop-blur-md rounded-[2rem] flex flex-col items-center justify-center text-center p-10"
+              >
+                <CheckCircle className="w-16 h-16 text-gold mb-6" />
+                <h3 className="text-2xl font-serif text-ivory mb-2">Thank You</h3>
+                <p className="text-ivory/60 text-sm">Your response has been beautifully captured.</p>
+                <button 
+                  onClick={() => setSubmitStatus(null)}
+                  className="mt-8 text-[10px] uppercase tracking-widest text-gold border-b border-gold/30 pb-1"
+                >
+                  Send another
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Right Column: Wishes Wall */}
+        <div className="glass-card p-8 md:p-10 rounded-[2rem] shadow-2xl h-full flex flex-col">
+          <div className="flex items-center gap-3 mb-8">
+            <Heart className="w-4 h-4 text-gold/80" />
+            <h2 className="text-[10px] tracking-[0.3em] uppercase text-gold/80 font-semibold">
+              Wishes & Prayers
+            </h2>
+          </div>
+
+          <div className="flex flex-col gap-5 overflow-y-auto max-h-[600px] pr-2 custom-scrollbar">
+            {displayWishes.map((wish, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="bg-ivory/[0.03] border border-gold/5 rounded-2xl p-6 hover:bg-ivory/[0.05] transition-colors group"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-3.5 h-3.5 rounded-full border border-gold/40 flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 bg-gold rounded-full" />
+                  </div>
+                  <span className="text-[9px] font-bold tracking-[0.15em] text-gold uppercase">
+                    {wish.status}
+                  </span>
+                </div>
+                <p className="text-sm text-ivory/80 italic font-serif leading-relaxed mb-4 group-hover:text-ivory transition-colors">
+                  "{wish.message}"
+                </p>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-[1px] bg-gold/30" />
+                  <span className="text-[10px] font-sans tracking-wide text-gold/70">— {wish.name}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-auto pt-6 text-center">
+            <p className="text-[9px] text-gold-dark/40 tracking-[0.2em] uppercase italic">
+              Sharing the love of family & friends
+            </p>
+          </div>
+        </div>
+
       </div>
     </section>
   );

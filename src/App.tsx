@@ -54,45 +54,28 @@ const AppContent: React.FC = () => {
 
           {/* Main Scroller Layout */}
           <main className="relative z-10 w-full overflow-hidden">
+            {/* Global Ambient Smudge Backgrounds */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden">
+              <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-gold/5 blur-[120px] rounded-full animate-pulse" />
+              <div className="absolute top-[40%] right-[-5%] w-[35%] h-[35%] bg-gold/3 blur-[150px] rounded-full" style={{ animationDelay: '2s' }} />
+              <div className="absolute bottom-[10%] left-[15%] w-[30%] h-[30%] bg-gold/5 blur-[100px] rounded-full animate-pulse" />
+            </div>
+
             <Hero />
-            
-            {/* Elegant Section Divider */}
-            <div className="flex items-center justify-center my-6">
-              <div className="w-24 h-[1px] bg-gradient-to-r from-transparent to-gold/30" />
-              <span className="text-[10px] tracking-[0.4em] uppercase text-gold mx-4">◆</span>
-              <div className="w-24 h-[1px] bg-gradient-to-l from-transparent to-gold/30" />
-            </div>
-
             <CoupleShowcase />
-
-            <div className="flex items-center justify-center my-6">
-              <div className="w-24 h-[1px] bg-gradient-to-r from-transparent to-gold/30" />
-              <span className="text-[10px] tracking-[0.4em] uppercase text-gold mx-4">◆</span>
-              <div className="w-24 h-[1px] bg-gradient-to-l from-transparent to-gold/30" />
-            </div>
-
             <EventTimeline />
-
-            <div className="flex items-center justify-center my-6">
-              <div className="w-24 h-[1px] bg-gradient-to-r from-transparent to-gold/30" />
-              <span className="text-[10px] tracking-[0.4em] uppercase text-gold mx-4">◆</span>
-              <div className="w-24 h-[1px] bg-gradient-to-l from-transparent to-gold/30" />
-            </div>
-
             <VenueMap />
-
-            <div className="flex items-center justify-center my-6">
-              <div className="w-24 h-[1px] bg-gradient-to-r from-transparent to-gold/30" />
-              <span className="text-[10px] tracking-[0.4em] uppercase text-gold mx-4">◆</span>
-              <div className="w-24 h-[1px] bg-gradient-to-l from-transparent to-gold/30" />
-            </div>
-
             <RSVPForm />
           </main>
 
           {/* Luxury Footer */}
-          <footer className="relative z-20 py-12 text-center text-gold-dark/50 text-[10px] tracking-[0.25em] uppercase border-t border-gold/5 bg-obsidian">
-            © {new Date().getFullYear()} Sahakar Family Celebrations. All rights reserved.
+          <footer className="relative z-20 py-16 text-center text-gold-dark/40 text-[10px] tracking-[0.25em] uppercase bg-transparent">
+            <div className="mb-2">
+              Brought to life with love by <a href="https://github.com/frpboy" target="_blank" rel="noopener noreferrer" className="text-gold/60 hover:text-gold transition-colors duration-300">Rahul</a>
+            </div>
+            <div>
+              © {new Date().getFullYear()} Sahakar Medical Ventures. All rights reserved.
+            </div>
           </footer>
         </div>
       )}

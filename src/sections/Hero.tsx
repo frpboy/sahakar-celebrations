@@ -1,12 +1,28 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useGuest } from '../hooks/useGuest';
 import gsap from 'gsap';
+import { weddingData } from '../config/wedding';
 
 export const Hero: React.FC = () => {
   const { name, inviteType } = useGuest();
   const welcomeRef = useRef<HTMLDivElement | null>(null);
   const titleRef = useRef<HTMLDivElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const scrollIndicatorRef = useRef<HTMLDivElement | null>(null);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setHasScrolled(true);
+      } else {
+        setHasScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     // Reveal animations
@@ -32,8 +48,7 @@ export const Hero: React.FC = () => {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 px-4 overflow-hidden">
-      {/* Background vignette & ambient gradients */}
-      <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-obsidian pointer-events-none z-10" />
+      {/* Background ambient gradients */}
       <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[80%] h-[40%] bg-gold/5 blur-[150px] rounded-full pointer-events-none" />
 
       {/* Guest greeting node */}
@@ -44,12 +59,6 @@ export const Hero: React.FC = () => {
         <h2 className="text-xl md:text-3xl font-serif text-ivory tracking-wide max-w-2xl px-4 mx-auto leading-relaxed italic">
           Welcome, {name}
         </h2>
-        {/* Diamond Gold Divider */}
-        <div className="flex items-center justify-center mt-4">
-          <div className="w-16 h-[1px] bg-gradient-to-r from-transparent to-gold/50" />
-          <div className="w-2 h-2 rotate-45 border border-gold/60 mx-2 bg-obsidian" />
-          <div className="w-16 h-[1px] bg-gradient-to-l from-transparent to-gold/50" />
-        </div>
       </div>
 
       {/* Main Ceremonial Header */}
@@ -85,18 +94,23 @@ export const Hero: React.FC = () => {
         <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 border-t border-gold/10 pt-6">
           <div className="text-center">
             <span className="block text-[10px] tracking-[0.25em] text-gold-dark uppercase mb-1">Date</span>
-            <span className="font-serif text-sm tracking-[0.1em] text-ivory">OCTOBER 24-26, 2026</span>
+            <span className="font-serif text-sm tracking-[0.1em] text-ivory">JULY 19, 2026</span>
           </div>
           <div className="hidden md:block w-[1px] h-8 bg-gold/20" />
           <div className="text-center">
-            <span className="block text-[10px] tracking-[0.25em] text-gold-dark uppercase mb-1">Venues</span>
-            <span className="font-serif text-sm tracking-[0.1em] text-ivory">SAHAKAR PALACE & GARDENS</span>
+            <span className="block text-[10px] tracking-[0.25em] text-gold-dark uppercase mb-1">Venue</span>
+            <span className="font-serif text-sm tracking-[0.1em] text-ivory uppercase">{weddingData.wedding.venue}</span>
           </div>
         </div>
       </div>
 
       {/* Downward indicator arrow */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20 cursor-pointer animate-bounce">
+      <div 
+        ref={scrollIndicatorRef}
+        className={`absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20 cursor-pointer transition-all duration-700 ease-in-out ${
+          hasScrolled ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0 animate-bounce'
+        }`}
+      >
         <span className="text-[9px] tracking-[0.3em] uppercase text-gold-dark/60">Scroll to Explore</span>
         <svg className="w-4 h-4 text-gold/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
