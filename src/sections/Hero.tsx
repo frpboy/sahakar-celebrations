@@ -111,13 +111,13 @@ export const Hero: React.FC = () => {
             <div className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 w-[1px] h-10 bg-gold/10" />
             <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-10 bg-gold/10" />
             
-            <span className="block text-[10px] tracking-[0.25em] text-gold-dark uppercase mb-1">Time</span>
-            <span className="font-serif text-sm tracking-[0.1em] text-ivory uppercase">4:30 PM Onwards</span>
+            <span className="block text-[10px] tracking-[0.25em] text-gold-dark uppercase mb-1">Venue</span>
+            <span className="font-serif text-sm tracking-[0.1em] text-ivory uppercase">{weddingData.wedding.venue}</span>
           </div>
 
           <div className="text-center md:text-left md:pl-8">
-            <span className="block text-[10px] tracking-[0.25em] text-gold-dark uppercase mb-1">Venue</span>
-            <span className="font-serif text-sm tracking-[0.1em] text-ivory uppercase">{weddingData.wedding.venue}</span>
+            <span className="block text-[10px] tracking-[0.25em] text-gold-dark uppercase mb-1">Time</span>
+            <span className="font-serif text-sm tracking-[0.1em] text-ivory uppercase">4:30 PM Onwards</span>
           </div>
         </div>
       </div>
