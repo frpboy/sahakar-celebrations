@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Lenis from 'lenis';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { MusicProvider } from './context/MusicContext';
 import { SplashIntro } from './components/cinematic/SplashIntro';
 import { ParticleCanvas } from './components/effects/ParticleCanvas';
