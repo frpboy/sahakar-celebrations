@@ -6,8 +6,7 @@ All notable changes and architectural versions of this project are documented be
 
 ## v1.8.0 — 2026-05-23 | Corporate Branding Integration & Optimization Polish
 - **Corporate Branding**:
-  - Replaced the generic serif `S` monogram in [SplashIntro.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/cinematic/SplashIntro.tsx) with a custom vector representation of the "Sahakar Medicals & Surgicals" logo, rendered in a Sapphire Blue gradient with gold borders.
-  * Aligned [favicon.svg](file:///e:/K4NN4N/sahakar-celebrations/public/favicon.svg) to use the new corporate Sapphire Blue squircle logo.
+  - Maintained the original gold serif `S` monogram crest inside [SplashIntro.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/cinematic/SplashIntro.tsx) to match the luxury romantic wedding aesthetic.
 - **Visual & Theme Upgrade**:
   - Refined theme tokens in [index.css](file:///e:/K4NN4N/sahakar-celebrations/src/index.css) to support Sapphire Blue and Gold combinations, shifting the body background to a deep sapphire-obsidian gradient.
   - Enhanced glassmorphic cards in [index.css](file:///e:/K4NN4N/sahakar-celebrations/src/index.css) with deeper blurs, gold borders, and internal sapphire glows.
