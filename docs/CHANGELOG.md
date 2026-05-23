@@ -13,6 +13,7 @@ All notable changes and architectural versions of this project are documented be
   - Refactored ambient background lighting in [App.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/App.tsx) to blend sapphire blue and warm gold.
 - **Interactive Particles**:
   - Upgraded the particle canvas in [ParticleCanvas.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/ParticleCanvas.tsx) to draw 3D tumbling diamond-shaped gold-leaf flakes and glistening sapphire stardust with parallax depth and twinkling effects.
+  - Coded an interactive **fluid light trail** (ribbon of blue-gold glow) following the mouse, featuring friction velocities, heat-rise drift, and a vector vortex that dynamically swirls falling dust particles in the cursor's wake.
 - **Performance & Media Optimization**:
   - Replaced heavy JPEG placeholders with compressed WebP assets in [couples.ts](file:///e:/K4NN4N/sahakar-celebrations/src/content/couples.ts), removing over 19 MB of obsolete images from the repository.
   - Optimized the mouse tracker loop in [MouseGlow.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/MouseGlow.tsx) to automatically pause requestAnimationFrame when the cursor is idle.
