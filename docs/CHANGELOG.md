@@ -4,6 +4,28 @@ All notable changes and architectural versions of this project are documented be
 
 ---
 
+## v1.8.0 — 2026-05-23 | Corporate Branding Integration & Optimization Polish
+- **Corporate Branding**:
+  - Replaced the generic serif `S` monogram in [SplashIntro.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/cinematic/SplashIntro.tsx) with a custom vector representation of the "Sahakar Medicals & Surgicals" logo, rendered in a Sapphire Blue gradient with gold borders.
+  * Aligned [favicon.svg](file:///e:/K4NN4N/sahakar-celebrations/public/favicon.svg) to use the new corporate Sapphire Blue squircle logo.
+- **Visual & Theme Upgrade**:
+  - Refined theme tokens in [index.css](file:///e:/K4NN4N/sahakar-celebrations/src/index.css) to support Sapphire Blue and Gold combinations, shifting the body background to a deep sapphire-obsidian gradient.
+  - Enhanced glassmorphic cards in [index.css](file:///e:/K4NN4N/sahakar-celebrations/src/index.css) with deeper blurs, gold borders, and internal sapphire glows.
+  - Refactored ambient background lighting in [App.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/App.tsx) to blend sapphire blue and warm gold.
+- **Interactive Particles**:
+  - Upgraded the particle canvas in [ParticleCanvas.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/ParticleCanvas.tsx) to draw 3D tumbling diamond-shaped gold-leaf flakes and glistening sapphire stardust with parallax depth and twinkling effects.
+- **Performance & Media Optimization**:
+  - Replaced heavy JPEG placeholders with compressed WebP assets in [couples.ts](file:///e:/K4NN4N/sahakar-celebrations/src/content/couples.ts), removing over 19 MB of obsolete images from the repository.
+  - Optimized the mouse tracker loop in [MouseGlow.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/MouseGlow.tsx) to automatically pause requestAnimationFrame when the cursor is idle.
+- **UX & Backend Validation**:
+  - Integrated a user feedback error alert block in [RSVPForm.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/sections/RSVPForm.tsx) for network failures.
+  - Aligned [Backend_Schema.md](file:///e:/K4NN4N/sahakar-celebrations/docs/Backend_Schema.md) definitions to match the simpler schema in `api/rsvp.ts` (removing unnecessary phone and email column constraints).
+- **SEO & Social Previews**:
+  - Configured a custom-designed luxury social preview card [social-preview.png](file:///e:/K4NN4N/sahakar-celebrations/public/social-preview.png) and updated Open Graph tags in [index.html](file:///e:/K4NN4N/sahakar-celebrations/index.html).
+  - Corrected meta keywords in [index.html](file:///e:/K4NN4N/sahakar-celebrations/index.html) to target the actual couples.
+
+---
+
 ## v1.7.0 — 2026-05-20 | Live Database Integration & UX Polish
 - **Neon DB Integration**: Fully connected the `api/rsvp.ts` handler to the Neon PostgreSQL database via `DATABASE_URL` environment variables.
 - **Dynamic Wishes Wall**: Implemented real-time fetching of guest wishes from the database, replacing all static dummy data in the `RSVPForm` component.
