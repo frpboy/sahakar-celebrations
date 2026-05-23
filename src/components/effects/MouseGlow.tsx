@@ -14,22 +14,27 @@ export const MouseGlow: React.FC = () => {
     checkTouch();
     if (isTouch) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!visible) setVisible(true);
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-    };
-
-    const handleMouseLeave = () => setVisible(false);
-
-    window.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseleave', handleMouseLeave);
-
     let animationId: number;
+    let isAnimating = false;
+
     const animate = () => {
-      // Lerp for smooth delayed interpolation
       const lerpFactor = 0.08;
-      glowRef.current.x += (mouseRef.current.x - glowRef.current.x) * lerpFactor;
-      glowRef.current.y += (mouseRef.current.y - glowRef.current.y) * lerpFactor;
+      const dx = mouseRef.current.x - glowRef.current.x;
+      const dy = mouseRef.current.y - glowRef.current.y;
+
+      // If the gap is tiny, snap to destination and stop loop
+      if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
+        glowRef.current.x = mouseRef.current.x;
+        glowRef.current.y = mouseRef.current.y;
+        if (containerRef.current) {
+          containerRef.current.style.transform = `translate3d(${glowRef.current.x}px, ${glowRef.current.y}px, 0)`;
+        }
+        isAnimating = false;
+        return;
+      }
+
+      glowRef.current.x += dx * lerpFactor;
+      glowRef.current.y += dy * lerpFactor;
 
       if (containerRef.current) {
         containerRef.current.style.transform = `translate3d(${glowRef.current.x}px, ${glowRef.current.y}px, 0)`;
@@ -37,12 +42,25 @@ export const MouseGlow: React.FC = () => {
       animationId = requestAnimationFrame(animate);
     };
 
-    animationId = requestAnimationFrame(animate);
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!visible) setVisible(true);
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+
+      if (!isAnimating) {
+        isAnimating = true;
+        animationId = requestAnimationFrame(animate);
+      }
+    };
+
+    const handleMouseLeave = () => setVisible(false);
+
+    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
-      cancelAnimationFrame(animationId);
+      if (animationId) cancelAnimationFrame(animationId);
     };
   }, [isTouch, visible]);
 

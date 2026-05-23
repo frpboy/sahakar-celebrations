@@ -91,23 +91,26 @@ export const SplashIntro: React.FC<SplashIntroProps> = ({ onEnter }) => {
           {/* Decorative frame elements */}
           <path d="M50 2 A48 48 0 0 1 98 50" stroke="url(#goldGradient)" strokeWidth="1" />
           <path d="M50 98 A48 48 0 0 1 2 50" stroke="url(#goldGradient)" strokeWidth="1" />
-          {/* Elegant Crest Details */}
-          <path d="M47 38 L53 38 M47 62 L53 62" stroke="url(#goldGradient)" strokeWidth="1" />
-          {/* Letter S (Serif style) */}
-          <text
-            x="50%"
-            y="56%"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill="url(#goldGradient)"
-            fontFamily="'Cinzel', 'Playfair Display', 'serif'"
-            fontSize="30"
-            fontWeight="bold"
-          >
-            S
-          </text>
+          {/* Custom logo squircle matching Sahakar Medical Ventures */}
+          <rect x="34" y="34" width="32" height="32" rx="9" fill="url(#sapphireGradient)" mask="url(#logoMask)" />
           
           <defs>
+            <mask id="logoMask">
+              {/* Everything white stays gold */}
+              <rect x="0" y="0" width="100" height="100" fill="white" />
+              {/* Black shapes cut out to show background */}
+              <circle cx="50" cy="50" r="12" fill="black" />
+              {/* White shapes restore gold inside the cutout */}
+              <circle cx="50" cy="44" r="2.5" fill="white" />
+              <rect x="47.5" y="52.5" width="5" height="7.5" rx="2.5" fill="white" />
+              <path d="M 38 50 L 50 50 A 6 6 0 1 0 44 44" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" />
+              <path d="M 62 50 L 50 50 A 6 6 0 1 0 56 56" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" />
+            </mask>
+            <linearGradient id="sapphireGradient" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#4A95D6" />
+              <stop offset="50%" stopColor="#1E6BB8" />
+              <stop offset="100%" stopColor="#124B84" />
+            </linearGradient>
             <linearGradient id="goldGradient" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stopColor="#F2D794" />
               <stop offset="50%" stopColor="#DFBA73" />

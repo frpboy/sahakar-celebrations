@@ -239,6 +239,14 @@ export const RSVPForm: React.FC = () => {
               />
             </div>
 
+            {/* Error Notification */}
+            {submitStatus === 'error' && (
+              <div className="text-[10px] text-crimson font-sans uppercase tracking-wider flex items-center gap-2 justify-center border border-crimson/20 bg-crimson/5 py-3 rounded-xl">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-crimson" />
+                <span>Failed to record response. Please check connection and try again.</span>
+              </div>
+            )}
+
             {/* Submit Button */}
             <button
               type="submit"

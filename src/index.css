@@ -10,12 +10,16 @@
   --color-gold-dark: #A48F65;
   --color-ivory: #F5F3EF;
   --color-crimson: #7D2235;
+  --color-sapphire-light: #4A95D6;
+  --color-sapphire: #1E6BB8;
+  --color-sapphire-dark: #124B84;
 
   --font-serif: "Cinzel", "Playfair Display", serif;
   --font-sans: "Inter", "Montserrat", sans-serif;
 
   --background-image-gold-gradient: linear-gradient(135deg, #DFBA73 0%, #A48F65 50%, #DFBA73 100%);
-  --background-image-dark-gradient: radial-gradient(circle at center, #16141D 0%, #0D0C10 100%);
+  --background-image-sapphire-gradient: linear-gradient(135deg, #4A95D6 0%, #1E6BB8 50%, #124B84 100%);
+  --background-image-dark-gradient: radial-gradient(circle at center, #0C152B 0%, #05060A 100%);
 }
 
 @utility text-stroke-gold {
@@ -30,29 +34,29 @@
 }
 
 @utility glass-card {
-  background: rgba(22, 20, 29, 0.65);
-  backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(223, 186, 115, 0.12);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(223, 186, 115, 0.02);
+  background: rgba(10, 14, 25, 0.7);
+  backdrop-filter: blur(14px) saturate(190%);
+  border: 1px solid rgba(223, 186, 115, 0.15);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 25px rgba(30, 107, 184, 0.05);
 }
 
 @utility glass-card-hover {
-  transition: all 0.7s cubic-bezier(0.2, 1, 0.3, 1);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   &:hover {
-    background: rgba(22, 20, 29, 0.85);
-    border-color: rgba(223, 186, 115, 0.4);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(223, 186, 115, 0.15);
-    transform: translateY(-5px);
+    background: rgba(10, 14, 25, 0.85);
+    border-color: rgba(223, 186, 115, 0.5);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(30, 107, 184, 0.22);
+    transform: translateY(-6px);
   }
 }
 
 body {
-  background-color: var(--color-obsidian);
+  background-color: #05060A;
   color: var(--color-ivory);
   font-family: var(--font-sans);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  background-image: radial-gradient(circle at 50% 50%, #16141D 0%, #0D0C10 100%);
+  background-image: radial-gradient(circle at 50% 50%, #0B1326 0%, #040508 100%);
   background-attachment: fixed;
 }
 

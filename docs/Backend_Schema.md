@@ -11,16 +11,13 @@ The database table `rsvps` holds guest responses. Use the following SQL command 
 CREATE TABLE IF NOT EXISTS rsvps (
     id SERIAL PRIMARY KEY,
     full_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255),
-    phone VARCHAR(50) NOT NULL,
     attendance VARCHAR(50) NOT NULL CHECK (attendance IN ('attending', 'declined')),
     guest_count INTEGER DEFAULT 1,
-    dietary_notes TEXT,
+    wishes TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Indexing for performance queries (e.g. tracking registrations by attendance status)
-CREATE INDEX IF NOT EXISTS idx_rsvps_phone ON rsvps (phone);
 CREATE INDEX IF NOT EXISTS idx_rsvps_attendance ON rsvps (attendance);
 ```
 
@@ -35,11 +32,9 @@ import { pgTable, serial, varchar, integer, text, timestamp } from 'drizzle-orm/
 export const rsvps = pgTable('rsvps', {
   id: serial('id').primaryKey(),
   fullName: varchar('full_name', { length: 255 }).notNull(),
-  email: varchar('email', { length: 255 }),
-  phone: varchar('phone', { length: 50 }).notNull(),
   attendance: varchar('attendance', { length: 50 }).notNull(), // 'attending' | 'declined'
   guestCount: integer('guest_count').default(1),
-  dietaryNotes: text('dietary_notes'),
+  wishes: text('wishes'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 ```
@@ -56,11 +51,9 @@ Submits a guest registration.
   ```json
   {
     "fullName": "Name string (required)",
-    "email": "Email string (optional)",
-    "phone": "Phone string (required)",
     "attendance": "attending | declined",
     "guestCount": 2, // integer (conditional, defaults to 0 if declined)
-    "dietaryNotes": "Special food requirements (optional)"
+    "wishes": "Special blessings or wishes (optional)"
   }
   ```
 * **Response (Success - Database configured)**:

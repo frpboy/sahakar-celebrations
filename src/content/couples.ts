@@ -32,8 +32,8 @@ export const couples: Couple[] = [
     coupleName: "Shabin & Sana",
     invitationUrl: "https://shabin-weds-sana.vercel.app",
     theme: "emerald-gold",
-    imageSrc: "/shabin-sana-1.jpg.jpeg",
-    images: ["/shabin-sana-1.jpg.jpeg", "/shabin-sana-2.jpg.jpeg"],
+    imageSrc: "/shabin-sana-1.webp",
+    images: ["/shabin-sana-1.webp", "/shabin-sana-2.webp"],
     desc: "The union of Muhammed Shabin and Sana. Celebrating lifetime bonds and eternal companionship.",
   },
   {

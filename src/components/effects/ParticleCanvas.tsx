@@ -9,6 +9,12 @@ interface Particle {
   opacity: number;
   angle: number;
   spin: number;
+  flop: number;
+  flopSpeed: number;
+  shimmerSpeed: number;
+  phase: number;
+  depth: number;
+  colorType: 'gold' | 'sapphire';
 }
 
 export const ParticleCanvas: React.FC = () => {
@@ -32,15 +38,25 @@ export const ParticleCanvas: React.FC = () => {
     const particles: Particle[] = [];
 
     const createParticle = (initY = false): Particle => {
+      const depth = Math.random() * 1.5 + 0.5; // Depth factor: 0.5 to 2.0
+      // 35% chance to generate Sapphire Stardust, 65% chance for Gold Leaf Flakes
+      const colorType = Math.random() < 0.35 ? 'sapphire' : 'gold';
+      
       return {
         x: Math.random() * width,
-        y: initY ? Math.random() * height : -10,
-        size: Math.random() * 2.5 + 0.5,
-        speedY: Math.random() * 0.8 + 0.3,
-        speedX: Math.random() * 0.4 - 0.2,
-        opacity: Math.random() * 0.6 + 0.2,
+        y: initY ? Math.random() * height : -20,
+        size: (colorType === 'sapphire' ? (Math.random() * 1.6 + 0.4) : (Math.random() * 2.2 + 0.6)) * depth,
+        speedY: (colorType === 'sapphire' ? (Math.random() * 0.7 + 0.3) : (Math.random() * 0.5 + 0.2)) * depth,
+        speedX: Math.random() * 0.2 - 0.1,
+        opacity: (Math.random() * 0.4 + 0.2) / depth,
         angle: Math.random() * Math.PI * 2,
-        spin: Math.random() * 0.02 - 0.01,
+        spin: Math.random() * 0.01 - 0.005,
+        flop: Math.random() * Math.PI * 2,
+        flopSpeed: Math.random() * 0.03 + 0.01,
+        shimmerSpeed: (colorType === 'sapphire' ? (Math.random() * 0.03 + 0.01) : (Math.random() * 0.015 + 0.005)),
+        phase: Math.random() * Math.PI * 2,
+        depth: depth,
+        colorType: colorType,
       };
     };
 
@@ -81,43 +97,90 @@ export const ParticleCanvas: React.FC = () => {
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
+        
+        // Physics update
         p.y += p.speedY;
-        p.x += p.speedX + Math.sin(p.angle) * 0.1;
+        p.x += p.speedX + Math.sin(p.angle) * 0.15;
         p.angle += p.spin;
+        p.flop += p.flopSpeed;
+        p.phase += p.shimmerSpeed;
 
-        // Mouse displacement wind vector
+        // Twinkling opacity modulation
+        const currentOpacity = Math.max(0.08, p.opacity * (0.6 + Math.sin(p.phase) * 0.4));
+
+        // Mouse displacement wind vector (stronger force on foreground layers)
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const maxDist = 120;
+        const maxDist = 130 * p.depth;
 
         if (dist < maxDist) {
           const force = (maxDist - dist) / maxDist;
-          const forceX = (dx / dist) * force * 1.5;
-          const forceY = (dy / dist) * force * 0.8;
+          const forceX = (dx / dist) * force * 2.0 * p.depth;
+          const forceY = (dy / dist) * force * 1.0 * p.depth;
           p.x += forceX;
           p.y += forceY;
         }
 
         // Respawn if boundaries reached
-        if (p.y > height || p.x < 0 || p.x > width) {
+        if (p.y > height + 20 || p.x < -20 || p.x > width + 20) {
           particles[i] = createParticle(false);
+          continue;
         }
 
-        // Draw gold particle (glowing soft gold circles)
+        // Render 3D tumbling gold leaf flake / sapphire stardust
         ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+        
+        // Simulate 3D tilt flip by scaling along the local X-axis
+        const scaleX = Math.sin(p.flop);
+        ctx.scale(scaleX, 1);
+
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        // Custom elegant diamond-like shape
+        ctx.moveTo(0, -p.size);
+        ctx.lineTo(p.size * 0.7, 0);
+        ctx.lineTo(0, p.size);
+        ctx.lineTo(-p.size * 0.7, 0);
+        ctx.closePath();
+
+        // 3D reflection sparkle when flake edge tilts toward viewport
+        const isReflecting = Math.abs(scaleX) < 0.22;
+        const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, p.size * 1.5);
         
-        // Luxury Champagne Gold gradient glow fill
-        const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2);
-        glow.addColorStop(0, `rgba(242, 215, 148, ${p.opacity})`);
-        glow.addColorStop(0.4, `rgba(223, 186, 115, ${p.opacity * 0.5})`);
-        glow.addColorStop(1, 'rgba(22, 20, 29, 0)');
-        
+        if (p.colorType === 'sapphire') {
+          // Sapphire Blue Color Logic
+          if (isReflecting) {
+            // Pure silver/blue reflection flash
+            glow.addColorStop(0, `rgba(255, 255, 255, ${currentOpacity * 1.6})`);
+            glow.addColorStop(0.3, `rgba(74, 149, 214, ${currentOpacity * 1.2})`);
+            glow.addColorStop(1, 'rgba(10, 14, 25, 0)');
+          } else {
+            // Vibrant Sapphire gradient matching corporate branding
+            glow.addColorStop(0, `rgba(74, 149, 214, ${currentOpacity})`);
+            glow.addColorStop(0.4, `rgba(30, 107, 184, ${currentOpacity * 0.5})`);
+            glow.addColorStop(1, 'rgba(10, 14, 25, 0)');
+          }
+          ctx.shadowColor = isReflecting ? 'rgba(255, 255, 255, 0.7)' : 'rgba(30, 107, 184, 0.4)';
+        } else {
+          // Gold Color Logic
+          if (isReflecting) {
+            // Pure silver/gold reflection flash
+            glow.addColorStop(0, `rgba(255, 255, 255, ${currentOpacity * 1.6})`);
+            glow.addColorStop(0.3, `rgba(253, 237, 196, ${currentOpacity * 1.2})`);
+            glow.addColorStop(1, 'rgba(10, 14, 25, 0)');
+          } else {
+            // Standard champagne gold gradient
+            glow.addColorStop(0, `rgba(242, 215, 148, ${currentOpacity})`);
+            glow.addColorStop(0.4, `rgba(223, 186, 115, ${currentOpacity * 0.5})`);
+            glow.addColorStop(1, 'rgba(10, 14, 25, 0)');
+          }
+          ctx.shadowColor = isReflecting ? 'rgba(255, 255, 255, 0.7)' : 'rgba(223, 186, 115, 0.4)';
+        }
+
         ctx.fillStyle = glow;
-        ctx.shadowColor = 'rgba(223, 186, 115, 0.4)';
-        ctx.shadowBlur = p.size * 1.5;
+        ctx.shadowBlur = p.size * (isReflecting ? 2.5 : 1.2);
         ctx.fill();
         ctx.restore();
       }
