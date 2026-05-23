@@ -66,10 +66,10 @@ const AppContent: React.FC = () => {
                 transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
                 className="absolute inset-0"
               >
-                <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-sapphire/5 blur-[140px] rounded-full animate-pulse" />
-                <div className="absolute top-[25%] right-[-10%] w-[55%] h-[55%] bg-gold/6 blur-[150px] rounded-full" style={{ animationDelay: '2s' }} />
-                <div className="absolute top-[55%] left-[-5%] w-[50%] h-[50%] bg-sapphire-dark/4 blur-[130px] rounded-full" style={{ animationDelay: '4s' }} />
-                <div className="absolute bottom-[-10%] right-[10%] w-[60%] h-[60%] bg-gold/4 blur-[140px] rounded-full animate-pulse" style={{ animationDelay: '6s' }} />
+                <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-sapphire/15 blur-[140px] rounded-full animate-pulse" />
+                <div className="absolute top-[25%] right-[-10%] w-[55%] h-[55%] bg-gold/8 blur-[150px] rounded-full" style={{ animationDelay: '2s' }} />
+                <div className="absolute top-[55%] left-[-5%] w-[50%] h-[50%] bg-sapphire-dark/10 blur-[130px] rounded-full" style={{ animationDelay: '4s' }} />
+                <div className="absolute bottom-[-10%] right-[10%] w-[60%] h-[60%] bg-gold/5 blur-[140px] rounded-full animate-pulse" style={{ animationDelay: '6s' }} />
               </motion.div>
               
               {/* Scene Transition Overlay */}
