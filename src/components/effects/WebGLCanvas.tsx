@@ -25,7 +25,7 @@ export const WebGLCanvas: React.FC = () => {
         camera={{ position: [0, 8, 30], fov: 45, near: 0.1, far: 200 }}
       >
         {/* Hazy dark cyan-obsidian fog */}
-        <fogExp2 attach="fog" color="#05060A" density={0.022} />
+        <fogExp2 attach="fog" args={["#05060A", 0.022]} />
         
         {/* Soft atmospheric ambient light */}
         <ambientLight intensity={0.4} color="#1E6BB8" />

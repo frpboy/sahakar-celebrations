@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Lenis from 'lenis';
+import { motion } from 'framer-motion';
 import { MusicProvider } from './context/MusicContext';
 import { SplashIntro } from './components/cinematic/SplashIntro';
 import { WebGLCanvas } from './components/effects/WebGLCanvas';
