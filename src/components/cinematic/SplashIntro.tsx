@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useMusic } from '../../context/MusicContext';
 import gsap from 'gsap';
+import { ParticleCanvas } from '../effects/ParticleCanvas';
 
 interface SplashIntroProps {
   onEnter: () => void;
@@ -64,13 +65,20 @@ export const SplashIntro: React.FC<SplashIntroProps> = ({ onEnter }) => {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-obsidian overflow-hidden select-none"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#05060A] overflow-hidden select-none"
       style={{
-        backgroundImage: 'radial-gradient(circle at center, #1C1924 0%, #0D0C10 100%)'
+        backgroundImage: 'radial-gradient(circle at center, #0F0E13 0%, #05060A 100%)'
       }}
     >
-      {/* Background ambient circular light aura */}
-      <div className="absolute w-[600px] h-[600px] rounded-full bg-gold/5 blur-[120px] animate-pulse pointer-events-none" />
+      {/* 2D Particle Canvas for floating leaf gold/sapphire dust & mouse swirls */}
+      <ParticleCanvas />
+
+      {/* Multi-Tone Ambient Auroramorphic Glows */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[55%] h-[55%] bg-sapphire/12 blur-[140px] rounded-full" />
+        <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-gold/6 blur-[150px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[55%] h-[55%] bg-sapphire-dark/10 blur-[130px] rounded-full" />
+      </div>
 
       {/* Luxury Monogram Crest */}
       <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-xl">
@@ -124,17 +132,13 @@ export const SplashIntro: React.FC<SplashIntroProps> = ({ onEnter }) => {
           SAHAKAR CELEBRATIONS
         </h1>
 
-        {/* CTA Enter Button */}
+        {/* CTA Enter Button - Chromemorphic Gold Chrome Foil Style */}
         <button
           ref={buttonRef}
           onClick={handleEnterClick}
-          className="group relative px-8 py-4 font-sans text-xs md:text-sm tracking-[0.3em] uppercase text-gold overflow-hidden rounded-full border border-gold/30 hover:border-gold transition-colors duration-500 bg-velvet/50 backdrop-blur-md active:scale-95"
+          className="px-8 py-4 rounded-full gold-chrome-btn active:scale-95 cursor-pointer relative z-10"
         >
-          {/* Spin Ring Border */}
-          <div className="absolute inset-0 border border-gold opacity-0 group-hover:opacity-100 rounded-full transition-opacity duration-500 scale-105 group-hover:scale-100" />
-          <span className="relative z-10 transition-colors duration-500 group-hover:text-ivory">
-            Enter Experience
-          </span>
+          Enter Experience
         </button>
       </div>
 
