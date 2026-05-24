@@ -37,10 +37,18 @@ const CoupleCard: React.FC<CoupleCardProps> = ({ names, role, desc, imageSrc, im
           key={idx}
           className={`absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out group-hover:scale-105 ${idx === currentImageIndex ? 'opacity-100 z-0' : 'opacity-0 -z-10'}`}
           style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(13, 12, 16, 0.4) 0%, rgba(22, 20, 29, 0.98) 95%), url(${src})`
+            backgroundImage: `url(${src})`
           }}
         />
       ))}
+      
+      {/* Gradient Overlay Layer (Separated to fix iOS/Safari multi-background color-tint bugs) */}
+      <div 
+        className="absolute inset-0 pointer-events-none z-[1]"
+        style={{
+          background: 'linear-gradient(to bottom, rgba(13, 12, 16, 0.4) 0%, rgba(22, 20, 29, 0.98) 95%)'
+        }}
+      />
       
       {/* Decorative Golden Corner Accents */}
       <div className="absolute top-4 left-4 w-6 h-6 border-t border-l border-gold/30 group-hover:border-gold/80 transition-colors duration-500" />
