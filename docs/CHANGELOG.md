@@ -4,6 +4,17 @@ All notable changes and architectural versions of this project are documented be
 
 ---
 
+## v1.9.0 — 2026-05-24 | 3D Landscape Terrain Background & High-Blur Glassmorphism
+- **3D Landscape Backdrop**:
+  - Integrated the custom-generated abstract 3D sapphire-gold landscape image (`wedding-landscape.png`) into the background container in [App.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/App.tsx).
+  - Coded scroll-driven parallax vertical translation and depth scale scaling on the backdrop using `framer-motion`'s `useScroll` and `useTransform` hooks.
+  - Implemented a continuous, slow camera-drift float effect utilizing a new `@keyframes landscapeDrift` animation configured in [index.css](file:///e:/K4NN4N/sahakar-celebrations/src/index.css).
+- **High-Blur Glassmorphism**:
+  - Re-styled the core `glass-card` and `glass-card-hover` utilities in [index.css](file:///e:/K4NN4N/sahakar-celebrations/src/index.css) to support an ultra-premium `24px` backdrop blur, reduced opacity (`0.65`), thin `0.14` gold borders, and subtle internal sapphire glow reflections (`0.08` opacity).
+  - This allows the background dunes and mountains to elegantly shimmer and bleed through the container layouts as the user navigates.
+
+---
+
 ## v1.8.0 — 2026-05-23 | Corporate Branding Integration & Optimization Polish
 - **Corporate Branding**:
   - Maintained the original gold serif `S` monogram crest inside [SplashIntro.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/cinematic/SplashIntro.tsx) to match the luxury romantic wedding aesthetic.

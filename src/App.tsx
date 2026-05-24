@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Lenis from 'lenis';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { MusicProvider } from './context/MusicContext';
 import { SplashIntro } from './components/cinematic/SplashIntro';
 import { ParticleCanvas } from './components/effects/ParticleCanvas';
@@ -16,6 +16,11 @@ import './App.css';
 
 const AppContent: React.FC = () => {
   const [entered, setEntered] = useState(false);
+  
+  // Track scroll for parallax terrain backdrop
+  const { scrollY } = useScroll();
+  const landscapeY = useTransform(scrollY, [0, 4000], [0, -180]);
+  const landscapeScale = useTransform(scrollY, [0, 4000], [1.02, 1.12]);
 
   useEffect(() => {
     if (!entered) return;
@@ -56,15 +61,34 @@ const AppContent: React.FC = () => {
 
           {/* Main Scroller Layout */}
           <main className="relative z-10 w-full">
-            {/* Global Ambient Smudge Backgrounds with Camera Drift */}
+            {/* Global Ambient Backgrounds & 3D Landscape Terrain */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+              {/* 3D Landscape Backdrop Wrapper with Scroll Parallax */}
+              <motion.div
+                style={{
+                  y: landscapeY,
+                  scale: landscapeScale,
+                }}
+                className="absolute -inset-20 z-0"
+              >
+                {/* Landscape Image with continuous slow camera-drift animation */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-85"
+                  style={{
+                    backgroundImage: `linear-gradient(to bottom, rgba(5, 6, 10, 0.4) 0%, rgba(5, 6, 10, 0.8) 55%, #05060A 95%), url('/wedding-landscape.png')`,
+                    animation: 'landscapeDrift 30s ease-in-out infinite',
+                  }}
+                />
+              </motion.div>
+
+              {/* Ambient Colored Smudges overlaying the landscape */}
               <motion.div 
                 animate={{ 
                   scale: [1, 1.06, 1],
                   rotate: [0, 1.5, 0],
                 }}
                 transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0"
+                className="absolute inset-0 z-10"
               >
                 <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-sapphire/15 blur-[140px] rounded-full animate-pulse" />
                 <div className="absolute top-[25%] right-[-10%] w-[55%] h-[55%] bg-gold/8 blur-[150px] rounded-full" style={{ animationDelay: '2s' }} />
@@ -73,7 +97,7 @@ const AppContent: React.FC = () => {
               </motion.div>
               
               {/* Scene Transition Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-obsidian/20 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-obsidian/20 to-transparent z-20" />
             </div>
 
             <Hero />

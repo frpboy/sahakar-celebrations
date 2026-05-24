@@ -34,19 +34,28 @@
 }
 
 @utility glass-card {
-  background: rgba(10, 14, 25, 0.7);
-  backdrop-filter: blur(14px) saturate(190%);
-  border: 1px solid rgba(223, 186, 115, 0.15);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 25px rgba(30, 107, 184, 0.05);
+  background: rgba(8, 12, 22, 0.65);
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(223, 186, 115, 0.14);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 30px rgba(74, 149, 214, 0.08);
 }
 
 @utility glass-card-hover {
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   &:hover {
-    background: rgba(10, 14, 25, 0.85);
-    border-color: rgba(223, 186, 115, 0.5);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(30, 107, 184, 0.22);
-    transform: translateY(-6px);
+    background: rgba(10, 15, 30, 0.75);
+    border-color: rgba(223, 186, 115, 0.35);
+    box-shadow: 0 35px 70px rgba(0, 0, 0, 0.75), inset 0 0 40px rgba(74, 149, 214, 0.15);
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes landscapeDrift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-1.5%, -1%) scale(1.04);
   }
 }
 
