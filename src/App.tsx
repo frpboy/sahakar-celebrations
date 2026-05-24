@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Lenis from 'lenis';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { MusicProvider } from './context/MusicContext';
 import { SplashIntro } from './components/cinematic/SplashIntro';
-import { ParticleCanvas } from './components/effects/ParticleCanvas';
-import { MouseGlow } from './components/effects/MouseGlow';
+import { WebGLCanvas } from './components/effects/WebGLCanvas';
 import { AudioToggle } from './components/ui/AudioToggle';
 import { Hero } from './sections/Hero';
 import { CoupleShowcase } from './sections/CoupleShowcase';
@@ -16,11 +14,6 @@ import './App.css';
 
 const AppContent: React.FC = () => {
   const [entered, setEntered] = useState(false);
-  
-  // Track scroll for parallax terrain backdrop
-  const { scrollY } = useScroll();
-  const landscapeY = useTransform(scrollY, [0, 4000], [0, -180]);
-  const landscapeScale = useTransform(scrollY, [0, 4000], [1.02, 1.12]);
 
   useEffect(() => {
     if (!entered) return;
@@ -54,51 +47,12 @@ const AppContent: React.FC = () => {
         <SplashIntro onEnter={() => setEntered(true)} />
       ) : (
         <div className="relative min-h-screen text-ivory">
-          {/* Ambient FX Engine */}
-          <ParticleCanvas />
-          <MouseGlow />
+          {/* WebGL 3D Landscape Canvas & FX Engine */}
+          <WebGLCanvas />
           <AudioToggle />
 
           {/* Main Scroller Layout */}
           <main className="relative z-10 w-full">
-            {/* Global Ambient Backgrounds & 3D Landscape Terrain */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-              {/* 3D Landscape Backdrop Wrapper with Scroll Parallax */}
-              <motion.div
-                style={{
-                  y: landscapeY,
-                  scale: landscapeScale,
-                }}
-                className="absolute -inset-20 z-0"
-              >
-                {/* Landscape Image with continuous slow camera-drift animation */}
-                <div 
-                  className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-85"
-                  style={{
-                    backgroundImage: `linear-gradient(to bottom, rgba(5, 6, 10, 0.4) 0%, rgba(5, 6, 10, 0.8) 55%, #05060A 95%), url('/wedding-landscape.png')`,
-                    animation: 'landscapeDrift 30s ease-in-out infinite',
-                  }}
-                />
-              </motion.div>
-
-              {/* Ambient Colored Smudges overlaying the landscape */}
-              <motion.div 
-                animate={{ 
-                  scale: [1, 1.06, 1],
-                  rotate: [0, 1.5, 0],
-                }}
-                transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 z-10"
-              >
-                <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-sapphire/15 blur-[140px] rounded-full animate-pulse" />
-                <div className="absolute top-[25%] right-[-10%] w-[55%] h-[55%] bg-gold/8 blur-[150px] rounded-full" style={{ animationDelay: '2s' }} />
-                <div className="absolute top-[55%] left-[-5%] w-[50%] h-[50%] bg-sapphire-dark/10 blur-[130px] rounded-full" style={{ animationDelay: '4s' }} />
-                <div className="absolute bottom-[-10%] right-[10%] w-[60%] h-[60%] bg-gold/5 blur-[140px] rounded-full animate-pulse" style={{ animationDelay: '6s' }} />
-              </motion.div>
-              
-              {/* Scene Transition Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-obsidian/20 to-transparent z-20" />
-            </div>
 
             <Hero />
             <CoupleShowcase />

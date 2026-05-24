@@ -4,6 +4,25 @@ All notable changes and architectural versions of this project are documented be
 
 ---
 
+## v2.0.0 — 2026-05-24 | 3D Interactive WebGL Canvas & Camera Choreography Upgrade
+- **Three.js WebGL Engine**:
+  - Integrated `three`, `@types/three`, `@react-three/fiber`, `@react-three/drei`, and `@react-three/postprocessing` into dependencies (fully compatible with React 19).
+  - Replaced the 2D background overlays and scroll backdrops in [App.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/App.tsx) with a full-viewport WebGL `<Canvas>` loaded in [WebGLCanvas.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/WebGLCanvas.tsx).
+- **Interactive Mountain Terrain**:
+  - Created [Terrain.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/Terrain.tsx) rendering a heavily subdivided 3D plane mesh.
+  - Applied the user-selected high-contrast Sapphire Glacier & Gold Veins scenery (`wedding-terrain.png`) as the height displacement and albedo texture mapping.
+  - Added a golden topographical wireframe overlay (`0.06` opacity) to merge digital vector grids with natural mountain terrain.
+- **Scroll-bound Flight Paths & Sway**:
+  - Authored [CameraChoreography.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/CameraChoreography.tsx) syncing scroll height ratios directly to 5 custom Bezier look-at checkpoints (dives close to dunes for RSVP, tilts up for map, pans horizontal for Couple showcase).
+  - Integrated subtle micro-parallax camera sway responding to normalized cursor pointer movements.
+- **WebGL Particle Emitters**:
+  - Authored [WebGLParticles.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/WebGLParticles.tsx) running 400 instances of gold-leaf flakes and sapphire stardust floating in 3D depth.
+  - Programmed cursor-repulsion force physics in the render loop, letting particles physically swirl in the path of the cursor.
+- **Performance Adjustments**:
+  - Implemented device capability detection, capping DPR at 1.5, disabling antialiasing, and bypassing high-overhead post-processing passes (Bloom, Noise, Vignette) on touch and mobile layouts to guarantee a steady 60 FPS.
+
+---
+
 ## v1.9.0 — 2026-05-24 | 3D Landscape Terrain Background & High-Blur Glassmorphism
 - **3D Landscape Backdrop**:
   - Integrated the custom-generated abstract 3D sapphire-gold landscape image (`wedding-landscape.png`) into the background container in [App.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/App.tsx).
