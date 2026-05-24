@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { EffectComposer, Bloom, Noise, Vignette } from '@react-three/postprocessing';
+import { EffectComposer, Bloom, Noise, Vignette, DepthOfField } from '@react-three/postprocessing';
 import { Terrain } from './Terrain';
 import { WebGLParticles } from './WebGLParticles';
 import { CameraChoreography } from './CameraChoreography';
@@ -68,13 +68,20 @@ export const WebGLCanvas: React.FC = () => {
         {/* Post processing effects (disabled on mobile for performance) */}
         {!isMobile && (
           <EffectComposer>
+            {/* Soft glowing gold filaments (selective bloom) */}
             <Bloom 
-              intensity={0.4} 
-              luminanceThreshold={0.7} 
-              luminanceSmoothing={0.3} 
+              intensity={1.3} 
+              luminanceThreshold={0.15} 
+              luminanceSmoothing={0.8} 
             />
-            <Noise opacity={0.035} />
-            <Vignette eskil={false} offset={0.1} darkness={0.8} />
+            {/* Cinematic camera depth blur (focusing on middle distance) */}
+            <DepthOfField 
+              focusDistance={0.5} 
+              focalLength={0.024} 
+              bokehScale={3.0} 
+            />
+            <Noise opacity={0.03} />
+            <Vignette eskil={false} offset={0.1} darkness={0.75} />
           </EffectComposer>
         )}
       </Canvas>
