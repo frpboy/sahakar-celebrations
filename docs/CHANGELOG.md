@@ -4,6 +4,22 @@ All notable changes and architectural versions of this project are documented be
 
 ---
 
+## v2.1.0 — 2026-05-24 | Silk Waves, Heartbeat Rhythm, Cursor Ripples & Tilt-Shift Bokeh Blur
+- **Silk Wave Morphing & Heartbeat**:
+  - Rewrote [Terrain.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/Terrain.tsx) to animate plane geometry vertices dynamically in a `useFrame` loop.
+  - Coded a double-sine morphing cycle modulated by a slow heartbeat pulse (~65 BPM) to make the terrain undulate like draped silk in a gentle breeze.
+- **Interactive Cursor Repulsion**:
+  - Programmed coordinate projection in the terrain render loop to calculate the distance between vertices and the normalized pointer coordinates, pushing down the landscape dynamically beneath the cursor for a tactile ripple effect.
+- **Glowing Filaments & Emissive Shaders**:
+  - Upgraded the gold wireframe overlay in [Terrain.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/Terrain.tsx) to a lit `meshStandardMaterial` with high emission values (`emissive: "#DFBA73"`, `emissiveIntensity: 1.8`).
+- **Cinematic Depth-of-Field (Tilt-Shift)**:
+  - Integrated a `DepthOfField` post-processing pass in [WebGLCanvas.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/WebGLCanvas.tsx) focusing on the mid-plane (`focusDistance: 0.5`, `focalLength: 0.024`, `bokehScale: 3.0`), creating organic bokeh blur circles on foreground/background lines.
+  - Adjusted `Bloom` parameters to capture the glowing wireframe filaments.
+- **Specular Glassmorphism Cards**:
+  - Upgraded the card layouts and form inputs in [index.css](file:///e:/K4NN4N/sahakar-celebrations/src/index.css) and [RSVPForm.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/sections/RSVPForm.tsx) with increased translucency (`0.32`), high backdrop blur (`28px`), and a specular highlight border.
+
+---
+
 ## v2.0.0 — 2026-05-24 | 3D Interactive WebGL Canvas & Camera Choreography Upgrade
 - **Three.js WebGL Engine**:
   - Integrated `three`, `@types/three`, `@react-three/fiber`, `@react-three/drei`, and `@react-three/postprocessing` into dependencies (fully compatible with React 19).
