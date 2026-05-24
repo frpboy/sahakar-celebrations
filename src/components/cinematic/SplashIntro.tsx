@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, Suspense } from 'react';
 import { useMusic } from '../../context/MusicContext';
 import gsap from 'gsap';
 import { ParticleCanvas } from '../effects/ParticleCanvas';
+import { WaterGlobe } from '../effects/WaterGlobe';
 
 interface SplashIntroProps {
   onEnter: () => void;
@@ -11,7 +12,7 @@ interface SplashIntroProps {
 export const SplashIntro: React.FC<SplashIntroProps> = ({ onEnter, onComplete }) => {
   const { playMusic } = useMusic();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const crestRef = useRef<SVGSVGElement | null>(null);
+  const crestRef = useRef<HTMLDivElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -94,44 +95,41 @@ export const SplashIntro: React.FC<SplashIntroProps> = ({ onEnter, onComplete })
         <span className="text-[10px] tracking-[0.4em] uppercase text-gold/60 mb-6 font-sans">
           Sahakar Medical Ventures Presents
         </span>
-        <svg
+        <div
           ref={crestRef}
-          className="w-40 h-40 md:w-48 md:h-48 drop-shadow-[0_0_20px_rgba(223,186,115,0.3)] mb-8"
-          viewBox="0 0 100 100"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+          className="relative w-40 h-40 md:w-48 md:h-48 mb-8 drop-shadow-[0_0_20px_rgba(223,186,115,0.3)] flex items-center justify-center"
         >
-          {/* Inner circle */}
-          <circle cx="50" cy="50" r="42" stroke="url(#goldGradient)" strokeWidth="1" />
-          {/* Outer circle */}
-          <circle cx="50" cy="50" r="45" stroke="url(#goldGradient)" strokeWidth="0.5" strokeDasharray="4 2" />
-          {/* Decorative frame elements */}
-          <path d="M50 2 A48 48 0 0 1 98 50" stroke="url(#goldGradient)" strokeWidth="1" />
-          <path d="M50 98 A48 48 0 0 1 2 50" stroke="url(#goldGradient)" strokeWidth="1" />
-          {/* Elegant Crest Details */}
-          <path d="M47 38 L53 38 M47 62 L53 62" stroke="url(#goldGradient)" strokeWidth="1" />
-          {/* Letter S (Serif style) */}
-          <text
-            x="50%"
-            y="56%"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill="url(#goldGradient)"
-            fontFamily="'Cinzel', 'Playfair Display', 'serif'"
-            fontSize="30"
-            fontWeight="bold"
+          {/* SVG Border Frame (without S text) */}
+          <svg
+            className="w-full h-full absolute inset-0"
+            viewBox="0 0 100 100"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            S
-          </text>
-          
-          <defs>
-            <linearGradient id="goldGradient" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#F2D794" />
-              <stop offset="50%" stopColor="#DFBA73" />
-              <stop offset="100%" stopColor="#A48F65" />
-            </linearGradient>
-          </defs>
-        </svg>
+            {/* Inner circle */}
+            <circle cx="50" cy="50" r="42" stroke="url(#goldGradient)" strokeWidth="1" />
+            {/* Outer circle */}
+            <circle cx="50" cy="50" r="45" stroke="url(#goldGradient)" strokeWidth="0.5" strokeDasharray="4 2" />
+            {/* Decorative frame elements */}
+            <path d="M50 2 A48 48 0 0 1 98 50" stroke="url(#goldGradient)" strokeWidth="1" />
+            <path d="M50 98 A48 48 0 0 1 2 50" stroke="url(#goldGradient)" strokeWidth="1" />
+            
+            <defs>
+              <linearGradient id="goldGradient" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#F2D794" />
+                <stop offset="50%" stopColor="#DFBA73" />
+                <stop offset="100%" stopColor="#A48F65" />
+              </linearGradient>
+            </defs>
+          </svg>
+
+          {/* 3D Water Globe Canvas carrying the monogram S inside */}
+          <div className="w-[82%] h-[82%] rounded-full overflow-hidden z-10 pointer-events-auto">
+            <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-[10px] text-gold/30">Loading...</div>}>
+              <WaterGlobe />
+            </Suspense>
+          </div>
+        </div>
 
         {/* Title */}
         <h1

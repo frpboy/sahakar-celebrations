@@ -58,7 +58,7 @@ class FluidDistortionEffect extends Effect {
 }
 
 export const FluidDistortion = forwardRef<any, {}>((_, ref) => {
-  const { size } = useThree();
+  const { size, gl } = useThree();
   const effect = useMemo(() => new FluidDistortionEffect(), []);
   
   // Track ripple state values
@@ -72,8 +72,9 @@ export const FluidDistortion = forwardRef<any, {}>((_, ref) => {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      const x = e.clientX / window.innerWidth;
-      const y = 1.0 - (e.clientY / window.innerHeight); // Flip Y axis for UV coordinates
+      const rect = gl.domElement.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = 1.0 - ((e.clientY - rect.top) / rect.height);
       
       const mousePos = new THREE.Vector2(x, y);
       const data = rippleData.current;

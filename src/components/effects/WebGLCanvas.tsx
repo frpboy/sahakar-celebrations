@@ -4,7 +4,6 @@ import { EffectComposer, Bloom, Noise, Vignette, DepthOfField } from '@react-thr
 import { Terrain } from './Terrain';
 import { WebGLParticles } from './WebGLParticles';
 import { CameraChoreography } from './CameraChoreography';
-import { FluidDistortion } from './FluidDistortion';
 
 export const WebGLCanvas: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -69,8 +68,6 @@ export const WebGLCanvas: React.FC = () => {
         {/* Post processing effects (disabled on mobile for performance) */}
         {!isMobile && (
           <EffectComposer>
-            {/* Global Fluid Distortion Mouse Trail */}
-            <FluidDistortion />
 
             {/* Soft glowing gold filaments (selective bloom) */}
             <Bloom 
