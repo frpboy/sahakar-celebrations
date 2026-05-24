@@ -8,6 +8,7 @@ All notable changes and architectural versions of this project are documented be
 - **Three.js WebGL Engine**:
   - Integrated `three`, `@types/three`, `@react-three/fiber`, `@react-three/drei`, and `@react-three/postprocessing` into dependencies (fully compatible with React 19).
   - Replaced the 2D background overlays and scroll backdrops in [App.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/App.tsx) with a full-viewport WebGL `<Canvas>` loaded in [WebGLCanvas.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/WebGLCanvas.tsx).
+  - Resolved build hotfixes: imported `motion` in [App.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/App.tsx) for footer transitions, and configured constructor `args` on the `<fogExp2>` tag in [WebGLCanvas.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/WebGLCanvas.tsx) for React 19 type safety.
 - **Interactive Mountain Terrain**:
   - Created [Terrain.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/Terrain.tsx) rendering a heavily subdivided 3D plane mesh.
   - Applied the user-selected high-contrast Sapphire Glacier & Gold Veins scenery (`wedding-terrain.png`) as the height displacement and albedo texture mapping.
