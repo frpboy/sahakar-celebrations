@@ -80,7 +80,7 @@ export const Hero: React.FC = () => {
           </h1>
           <div className="w-12 h-[1px] bg-gold/30 mx-auto mb-10" />
           <h2 className="text-sm md:text-lg font-serif text-ivory/70 tracking-widest max-w-2xl mx-auto leading-relaxed italic uppercase">
-            Cordially inviting you to an evening of elegance as we celebrate the matrimonial unions within the Sahakar Family.
+            Cordially inviting you to an evening of elegance as we celebrate the matrimonial unions of Shabin & Sana and Sameer & Nihala within the Sahakar Family.
           </h2>
         </div>
 
