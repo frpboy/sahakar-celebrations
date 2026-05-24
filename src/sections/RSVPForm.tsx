@@ -31,12 +31,12 @@ export const RSVPForm: React.FC = () => {
     fetchWishes();
   }, []);
 
-  // Auto-scroll loop: rotates wishes showing 2 at a time
+  // Auto-scroll loop: rotates wishes showing 3 at a time
   useEffect(() => {
-    if (displayWishes.length <= 2 || isPaused || isHovered) return;
+    if (displayWishes.length <= 3 || isPaused || isHovered) return;
 
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 2) % displayWishes.length);
+      setCurrentIndex((prev) => (prev + 3) % displayWishes.length);
     }, 5000); // cycle duration 5s
 
     return () => clearInterval(timer);
@@ -64,11 +64,13 @@ export const RSVPForm: React.FC = () => {
   };
 
   const getVisibleWishes = () => {
-    if (displayWishes.length <= 2) return displayWishes;
+    if (displayWishes.length <= 3) return displayWishes;
     const first = displayWishes[currentIndex % displayWishes.length];
     const secondIndex = (currentIndex + 1) % displayWishes.length;
+    const thirdIndex = (currentIndex + 2) % displayWishes.length;
     const second = displayWishes[secondIndex];
-    return [first, second];
+    const third = displayWishes[thirdIndex];
+    return [first, second, third];
   };
 
   const validate = () => {
@@ -322,7 +324,7 @@ export const RSVPForm: React.FC = () => {
                 Wishes & Messages
               </h2>
             </div>
-            {(isPaused || isHovered) && displayWishes.length > 2 && (
+            {(isPaused || isHovered) && displayWishes.length > 3 && (
               <span className="text-[8px] tracking-[0.15em] text-gold/40 uppercase font-sans animate-pulse">
                 Paused
               </span>
