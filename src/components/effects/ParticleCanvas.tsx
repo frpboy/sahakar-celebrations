@@ -17,14 +17,6 @@ interface Particle {
   colorType: 'gold' | 'sapphire';
 }
 
-interface TrailPoint {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  alpha: number;
-  age: number;
-}
 
 export const ParticleCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -46,10 +38,6 @@ export const ParticleCanvas: React.FC = () => {
     const particleCount = isMobile ? 35 : 90;
     const particles: Particle[] = [];
     
-    // Interactive mouse trail nodes history
-    const trail: TrailPoint[] = [];
-    let lastMouseX = -1000;
-    let lastMouseY = -1000;
 
     const createParticle = (initY = false): Particle => {
       const depth = Math.random() * 1.5 + 0.5; // Depth factor: 0.5 to 2.0
@@ -109,80 +97,6 @@ export const ParticleCanvas: React.FC = () => {
       mouse.x += (mouse.targetX - mouse.x) * 0.08;
       mouse.y += (mouse.targetY - mouse.y) * 0.08;
 
-      // Spawn mouse trail points if mouse has moved
-      if (lastMouseX !== -1000 && lastMouseY !== -1000) {
-        const dx = mouse.x - lastMouseX;
-        const dy = mouse.y - lastMouseY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        // Limit point spawning distance to avoid huge loops
-        if (dist > 1.5 && dist < 300) {
-          const steps = Math.min(6, Math.floor(dist / 5));
-          for (let s = 0; s <= steps; s++) {
-            const ratio = steps === 0 ? 0 : s / steps;
-            const px = lastMouseX + dx * ratio;
-            const py = lastMouseY + dy * ratio;
-            
-            trail.push({
-              x: px,
-              y: py,
-              vx: dx * 0.04 + (Math.random() * 0.4 - 0.2),
-              vy: dy * 0.04 + (Math.random() * 0.4 - 0.2),
-              alpha: 1.0,
-              age: 0,
-            });
-          }
-        }
-      }
-
-      // Track last mouse frame
-      if (mouse.x > -500) {
-        lastMouseX = mouse.x;
-        lastMouseY = mouse.y;
-      }
-
-      // Update and draw dynamic fluid light trail (glowing overlapping ribbons)
-      for (let i = trail.length - 1; i >= 0; i--) {
-        const p = trail[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vx *= 0.94; // Friction damping
-        p.vy *= 0.94;
-        p.vy -= 0.02; // Soft heat rise upward drift
-        p.alpha -= 0.024; // Age decay
-        p.age += 1;
-
-        if (p.alpha <= 0) {
-          trail.splice(i, 1);
-          continue;
-        }
-
-        // Draw soft glowing fluid particle node
-        ctx.save();
-        ctx.beginPath();
-        const size = (12 + Math.sin(p.age * 0.08) * 3) * p.alpha;
-        ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
-        
-        const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 1.5);
-        
-        // Alternate colors in the trail for an organic blue-gold liquid fusion look
-        if (i % 2 === 0) {
-          glow.addColorStop(0, `rgba(74, 149, 214, ${p.alpha * 0.5})`);
-          glow.addColorStop(0.4, `rgba(30, 107, 184, ${p.alpha * 0.2})`);
-          glow.addColorStop(1, 'rgba(10, 14, 25, 0)');
-          ctx.shadowColor = 'rgba(30, 107, 184, 0.4)';
-        } else {
-          glow.addColorStop(0, `rgba(242, 215, 148, ${p.alpha * 0.4})`);
-          glow.addColorStop(0.4, `rgba(223, 186, 115, ${p.alpha * 0.15})`);
-          glow.addColorStop(1, 'rgba(10, 14, 25, 0)');
-          ctx.shadowColor = 'rgba(223, 186, 115, 0.3)';
-        }
-
-        ctx.fillStyle = glow;
-        ctx.shadowBlur = size * 2;
-        ctx.fill();
-        ctx.restore();
-      }
 
       // Draw and update falling particles
       for (let i = 0; i < particles.length; i++) {
@@ -198,26 +112,6 @@ export const ParticleCanvas: React.FC = () => {
         // Twinkling opacity modulation
         const currentOpacity = Math.max(0.08, p.opacity * (0.6 + Math.sin(p.phase) * 0.4));
 
-        // Interactive mouse trail vortex wake (swirl particles near trail)
-        for (let j = 0; j < trail.length; j += 3) { // sample every 3rd trail point for speed
-          const tp = trail[j];
-          const tdx = p.x - tp.x;
-          const tdy = p.y - tp.y;
-          const tdist = Math.sqrt(tdx * tdx + tdy * tdy);
-          const tmaxDist = 55;
-
-          if (tdist < tmaxDist) {
-            const tforce = (tmaxDist - tdist) / tmaxDist;
-            
-            // Drag the particle along with the trail point's velocity
-            p.x += tp.vx * tforce * 0.6;
-            p.y += tp.vy * tforce * 0.6;
-            
-            // Add a swirl force (perpendicular to displacement)
-            p.x += (-tdy / (tdist + 1)) * tforce * 0.8;
-            p.y += (tdx / (tdist + 1)) * tforce * 0.8;
-          }
-        }
 
         // Standard mouse displacement wind vector (foreground layers)
         const dx = p.x - mouse.x;
