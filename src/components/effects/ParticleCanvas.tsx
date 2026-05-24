@@ -249,12 +249,8 @@ export const ParticleCanvas: React.FC = () => {
         ctx.scale(scaleX, 1);
 
         ctx.beginPath();
-        // Custom elegant diamond-like shape
-        ctx.moveTo(0, -p.size);
-        ctx.lineTo(p.size * 0.7, 0);
-        ctx.lineTo(0, p.size);
-        ctx.lineTo(-p.size * 0.7, 0);
-        ctx.closePath();
+        // Soft circular glow shape instead of square/diamond
+        ctx.arc(0, 0, p.size, 0, Math.PI * 2);
 
         // 3D reflection sparkle when flake edge tilts toward viewport
         const isReflecting = Math.abs(scaleX) < 0.22;

@@ -67,9 +67,9 @@ export const Terrain: React.FC = () => {
       const distSq = dx * dx + dy * dy;
       const radius = 28;
 
-      if (distSq < 784) { // radius 28
+      if (distSq < radius * radius) {
         const dist = Math.sqrt(distSq);
-        const force = (28 - dist) / 28;
+        const force = (radius - dist) / radius;
         // Smooth ease-out push
         const smoothForce = force * force * (3 - 2 * force);
         heightVal -= smoothForce * 3.6;

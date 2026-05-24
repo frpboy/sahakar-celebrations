@@ -94,6 +94,30 @@
   }
 }
 
+@utility gold-outline-btn {
+  background: rgba(5, 6, 10, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(223, 186, 115, 0.4);
+  color: #DFBA73;
+  box-shadow: 0 0 0 rgba(223, 186, 115, 0);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  
+  &:hover {
+    border-color: rgba(223, 186, 115, 0.8);
+    background: rgba(223, 186, 115, 0.08);
+    box-shadow: 0 0 20px rgba(223, 186, 115, 0.2);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    background: rgba(223, 186, 115, 0.15);
+  }
+}
+
 @keyframes landscapeDrift {
   0%, 100% {
     transform: translate(0, 0) scale(1);

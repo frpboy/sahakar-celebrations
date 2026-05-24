@@ -15,6 +15,7 @@ import './App.css';
 
 const AppContent: React.FC = () => {
   const [entered, setEntered] = useState(false);
+  const [splashActive, setSplashActive] = useState(true);
 
   useEffect(() => {
     if (!entered) return;
@@ -43,18 +44,16 @@ const AppContent: React.FC = () => {
   }, [entered]);
 
   return (
-    <>
-      {!entered ? (
-        <SplashIntro onEnter={() => setEntered(true)} />
-      ) : (
-        <div className="relative min-h-screen text-ivory">
-          {/* WebGL 3D Landscape Canvas & FX Engine */}
-          <WebGLCanvas />
+    <div className="relative min-h-screen text-ivory bg-[#05060A]">
+      {/* WebGL 3D Landscape Canvas is always active to pre-render the canyon */}
+      <WebGLCanvas />
+      
+      {entered && (
+        <>
           <AudioToggle />
 
           {/* Main Scroller Layout */}
           <main className="relative z-10 w-full">
-
             <Hero />
             <CoupleShowcase />
             <EventTimeline />
@@ -87,9 +86,17 @@ const AppContent: React.FC = () => {
               </div>
             </div>
           </footer>
-        </div>
+        </>
       )}
-    </>
+
+      {/* Splash Intro overlays the content initially */}
+      {splashActive && (
+        <SplashIntro 
+          onEnter={() => setEntered(true)} 
+          onComplete={() => setSplashActive(false)} 
+        />
+      )}
+    </div>
   );
 };
 

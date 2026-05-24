@@ -4,6 +4,16 @@ All notable changes and architectural versions of this project are documented be
 
 ---
 
+## v2.2.0 — 2026-05-24 | Chromemorphic Gold Buttons & Auroramorphic Card Glows
+- **Chromemorphism (Gold Chrome Foil Buttons)**:
+  - Authored a custom `.gold-chrome-btn` utility class in [index.css](file:///e:/K4NN4N/sahakar-celebrations/src/index.css) using a high-contrast multi-stop linear gradient (`#A48F65`, `#DFBA73`, `#FFF3D1`) to simulate reflective, metallic gold-foil print.
+  - Set up active scale offsets and light shift transitions (`background-position: right center`) on cursor hover to create dynamic metallic specular movements.
+  - Linked the custom gold-chrome class onto primary actions: "VIEW INVITATION" inside [CoupleShowcase.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/sections/CoupleShowcase.tsx), "SUBMIT RSVP" inside [RSVPForm.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/sections/RSVPForm.tsx), and "NAVIGATE" inside [VenueMap.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/sections/VenueMap.tsx).
+- **Auroramorphism (Golden Ambient Glows)**:
+  - Upgraded the `.glass-card` and `.glass-card-hover` wrappers in [index.css](file:///e:/K4NN4N/sahakar-celebrations/src/index.css) to project a soft, warm golden ambient aura glow (`rgba(223, 186, 115, 0.08)` and `0.14` on hover) directly behind card containers, softening the dark midnight backdrop.
+
+---
+
 ## v2.1.0 — 2026-05-24 | Silk Waves, Heartbeat Rhythm, Cursor Ripples & Tilt-Shift Bokeh Blur
 - **Silk Wave Morphing & Heartbeat**:
   - Rewrote [Terrain.tsx](file:///e:/K4NN4N/sahakar-celebrations/src/components/effects/Terrain.tsx) to animate plane geometry vertices dynamically in a `useFrame` loop.

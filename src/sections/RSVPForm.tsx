@@ -23,10 +23,24 @@ export const RSVPForm: React.FC = () => {
 
   // Dynamic wishes from database
   const [displayWishes, setDisplayWishes] = useState<Wish[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     fetchWishes();
   }, []);
+
+  // Auto-scroll loop: rotates wishes showing 2 at a time
+  useEffect(() => {
+    if (displayWishes.length <= 2 || isPaused || isHovered) return;
+
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 2) % displayWishes.length);
+    }, 5000); // cycle duration 5s
+
+    return () => clearInterval(timer);
+  }, [displayWishes.length, isPaused, isHovered]);
 
   const fetchWishes = async () => {
     try {
@@ -42,10 +56,19 @@ export const RSVPForm: React.FC = () => {
             status: item.attendance === 'attending' ? 'ATTENDING' : 'DECLINED'
           }));
         setDisplayWishes(formattedData);
+        setCurrentIndex(0); // Reset scroll index to show latest wishes
       }
     } catch (err) {
       console.error('Failed to fetch wishes:', err);
     }
+  };
+
+  const getVisibleWishes = () => {
+    if (displayWishes.length <= 2) return displayWishes;
+    const first = displayWishes[currentIndex % displayWishes.length];
+    const secondIndex = (currentIndex + 1) % displayWishes.length;
+    const second = displayWishes[secondIndex];
+    return [first, second];
   };
 
   const validate = () => {
@@ -292,14 +315,27 @@ export const RSVPForm: React.FC = () => {
           <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-bl from-gold/[0.02] via-transparent to-transparent pointer-events-none" />
 
-          <div className="flex items-center gap-3 mb-6 flex-shrink-0 relative z-10">
-            <Heart className="w-4 h-4 text-gold/80" />
-            <h2 className="text-[9px] tracking-[0.2em] uppercase text-gold/80 font-bold">
-              Wishes & Messages
-            </h2>
+          <div className="flex items-center justify-between mb-6 flex-shrink-0 relative z-10">
+            <div className="flex items-center gap-3">
+              <Heart className="w-4 h-4 text-gold/80" />
+              <h2 className="text-[9px] tracking-[0.2em] uppercase text-gold/80 font-bold">
+                Wishes & Messages
+              </h2>
+            </div>
+            {(isPaused || isHovered) && displayWishes.length > 2 && (
+              <span className="text-[8px] tracking-[0.15em] text-gold/40 uppercase font-sans animate-pulse">
+                Paused
+              </span>
+            )}
           </div>
 
-          <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+          <div 
+            className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar cursor-pointer"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={() => setIsPaused(prev => !prev)}
+            title="Click to Pause/Resume message loop"
+          >
             {displayWishes.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center py-10 relative">
                 <motion.div
@@ -326,11 +362,13 @@ export const RSVPForm: React.FC = () => {
               </div>
             ) : (
               <AnimatePresence initial={false}>
-                {displayWishes.map((wish, idx) => (
+                {getVisibleWishes().map((wish) => (
                   <motion.div
-                    key={idx}
+                    key={wish.name + wish.message}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.4 }}
                     className="bg-ivory/[0.03] border border-gold/10 rounded-xl p-5 hover:bg-ivory/[0.05] transition-all duration-300 group shadow-sm overflow-hidden"
                   >
                     <div className="flex items-center gap-2 mb-2.5">

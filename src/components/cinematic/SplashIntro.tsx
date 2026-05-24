@@ -5,9 +5,10 @@ import { ParticleCanvas } from '../effects/ParticleCanvas';
 
 interface SplashIntroProps {
   onEnter: () => void;
+  onComplete: () => void;
 }
 
-export const SplashIntro: React.FC<SplashIntroProps> = ({ onEnter }) => {
+export const SplashIntro: React.FC<SplashIntroProps> = ({ onEnter, onComplete }) => {
   const { playMusic } = useMusic();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const crestRef = useRef<SVGSVGElement | null>(null);
@@ -40,10 +41,18 @@ export const SplashIntro: React.FC<SplashIntroProps> = ({ onEnter }) => {
     // Unlock Web Audio API Context and start music
     playMusic();
 
+    // Immediately trigger onEnter to mount the main page layout behind the overlay
+    onEnter();
+
+    // Disable pointer events on the splash container so user doesn't hit dead zones
+    if (containerRef.current) {
+      containerRef.current.style.pointerEvents = 'none';
+    }
+
     // GSAP Exit Sequence
     const exitTl = gsap.timeline({
       onComplete: () => {
-        onEnter();
+        onComplete();
       }
     });
 
@@ -56,10 +65,10 @@ export const SplashIntro: React.FC<SplashIntroProps> = ({ onEnter }) => {
     });
 
     exitTl.to(containerRef.current, {
-      yPercent: -100,
-      duration: 1.2,
-      ease: 'power4.inOut'
-    }, '-=0.3');
+      opacity: 0,
+      duration: 1.0,
+      ease: 'power2.inOut'
+    }, '-=0.4');
   };
 
   return (
@@ -132,11 +141,11 @@ export const SplashIntro: React.FC<SplashIntroProps> = ({ onEnter }) => {
           SAHAKAR CELEBRATIONS
         </h1>
 
-        {/* CTA Enter Button - Chromemorphic Gold Chrome Foil Style */}
+        {/* CTA Enter Button - Elegant Gold Outline Style */}
         <button
           ref={buttonRef}
           onClick={handleEnterClick}
-          className="px-8 py-4 rounded-full gold-chrome-btn active:scale-95 cursor-pointer relative z-10"
+          className="px-8 py-3 rounded-full gold-outline-btn active:scale-95 cursor-pointer relative z-10 font-sans tracking-[0.2em] text-xs uppercase"
         >
           Enter Experience
         </button>
