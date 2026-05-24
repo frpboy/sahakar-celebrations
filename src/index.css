@@ -223,3 +223,14 @@ html.lenis, html.lenis body {
   from { transform: translateX(0); }
   to { transform: translateX(-100px); }
 }
+
+@keyframes sparkle {
+  0%, 100% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1) rotate(90deg);
+    opacity: 1;
+  }
+}

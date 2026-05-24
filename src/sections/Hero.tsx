@@ -3,6 +3,54 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { weddingData } from '../config/wedding';
 
+const SparkleText: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <span className="relative inline-block px-2 font-bold text-lg md:text-2xl font-serif">
+      <span className="gold-gradient-text drop-shadow-[0_0_12px_rgba(223,186,115,0.45)] not-italic">
+        {children}
+      </span>
+      <span className="absolute inset-0 pointer-events-none">
+        {/* Top left sparkle */}
+        <span 
+          className="absolute -top-1 -left-2 w-3.5 h-3.5 animate-[sparkle_2.5s_infinite_ease-in-out] block"
+          style={{ animationDelay: '0.2s' }}
+        >
+          <svg viewBox="0 0 16 16" fill="none" className="w-full h-full drop-shadow-[0_0_8px_rgba(255,243,209,0.9)]">
+            <path d="M8 0L9.5 5.5L15 8L9.5 10.5L8 16L6.5 10.5L1 8L6.5 5.5L8 0Z" fill="#FFF3D1" />
+          </svg>
+        </span>
+        {/* Top right sparkle */}
+        <span 
+          className="absolute -top-3 right-2 w-2.5 h-2.5 animate-[sparkle_2s_infinite_ease-in-out] block"
+          style={{ animationDelay: '0.8s' }}
+        >
+          <svg viewBox="0 0 16 16" fill="none" className="w-full h-full drop-shadow-[0_0_6px_rgba(255,243,209,0.8)]">
+            <path d="M8 0L9.5 5.5L15 8L9.5 10.5L8 16L6.5 10.5L1 8L6.5 5.5L8 0Z" fill="#DFBA73" />
+          </svg>
+        </span>
+        {/* Bottom right sparkle */}
+        <span 
+          className="absolute -bottom-2 -right-1.5 w-3 h-3 animate-[sparkle_3s_infinite_ease-in-out] block"
+          style={{ animationDelay: '1.4s' }}
+        >
+          <svg viewBox="0 0 16 16" fill="none" className="w-full h-full drop-shadow-[0_0_8px_rgba(255,243,209,0.9)]">
+            <path d="M8 0L9.5 5.5L15 8L9.5 10.5L8 16L6.5 10.5L1 8L6.5 5.5L8 0Z" fill="#FFF3D1" />
+          </svg>
+        </span>
+        {/* Bottom left sparkle */}
+        <span 
+          className="absolute -bottom-3 left-4 w-2 h-2 animate-[sparkle_2.2s_infinite_ease-in-out] block"
+          style={{ animationDelay: '0.5s' }}
+        >
+          <svg viewBox="0 0 16 16" fill="none" className="w-full h-full drop-shadow-[0_0_6px_rgba(255,243,209,0.8)]">
+            <path d="M8 0L9.5 5.5L15 8L9.5 10.5L8 16L6.5 10.5L1 8L6.5 5.5L8 0Z" fill="#DFBA73" />
+          </svg>
+        </span>
+      </span>
+    </span>
+  );
+};
+
 export const Hero: React.FC = () => {
   const welcomeRef = useRef<HTMLDivElement | null>(null);
   const titleRef = useRef<HTMLDivElement | null>(null);
@@ -80,7 +128,7 @@ export const Hero: React.FC = () => {
           </h1>
           <div className="w-12 h-[1px] bg-gold/30 mx-auto mb-10" />
           <h2 className="text-sm md:text-lg font-serif text-ivory/70 tracking-widest max-w-2xl mx-auto leading-relaxed italic uppercase">
-            Cordially inviting you to an evening of elegance as we celebrate the matrimonial unions of Shabin & Sana and Sameer & Nihala within the Sahakar Family.
+            Cordially inviting you to an evening of elegance as we celebrate the matrimonial unions of <SparkleText>Shabin & Sana</SparkleText> and <SparkleText>Sameer & Nihala</SparkleText> within the Sahakar Family.
           </h2>
         </div>
 
