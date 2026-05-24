@@ -39,6 +39,7 @@
   border: 1px solid rgba(223, 186, 115, 0.18);
   box-shadow: 
     0 30px 70px rgba(0, 0, 0, 0.65), 
+    0 0 70px rgba(223, 186, 115, 0.08), /* Auroramorphism golden glow */
     inset 0 1px 1px rgba(255, 255, 255, 0.08), 
     inset 0 0 40px rgba(30, 107, 184, 0.1);
 }
@@ -50,9 +51,46 @@
     border-color: rgba(223, 186, 115, 0.4);
     box-shadow: 
       0 40px 80px rgba(0, 0, 0, 0.8), 
+      0 0 90px rgba(223, 186, 115, 0.14), /* Increased gold aurora glow */
       inset 0 1px 1px rgba(255, 255, 255, 0.12),
       inset 0 0 50px rgba(74, 149, 214, 0.18);
     transform: translateY(-4px);
+  }
+}
+
+@utility gold-chrome-btn {
+  background: linear-gradient(135deg, 
+    #A48F65 0%, 
+    #DFBA73 25%, 
+    #FFF3D1 50%, 
+    #DFBA73 75%, 
+    #A48F65 100%
+  );
+  background-size: 200% auto;
+  color: #0D0C10;
+  box-shadow: 
+    0 4px 15px rgba(223, 186, 115, 0.25), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  text-shadow: 0 0.5px 0.5px rgba(255, 255, 255, 0.25);
+  
+  &:hover {
+    background-position: right center;
+    box-shadow: 
+      0 10px 25px rgba(223, 186, 115, 0.4), 
+      inset 0 1.5px 0 rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 
+      0 4px 10px rgba(223, 186, 115, 0.2), 
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
 }
 

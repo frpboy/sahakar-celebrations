@@ -251,7 +251,7 @@ export const RSVPForm: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-4 bg-gold text-obsidian font-sans font-black text-[10px] tracking-[0.25em] uppercase hover:bg-gold-light active:scale-[0.98] transition-all duration-500 rounded-xl flex items-center justify-center gap-3"
+              className="w-full py-4 gold-chrome-btn rounded-xl flex items-center justify-center gap-3 active:scale-[0.98] cursor-pointer"
             >
               {isSubmitting ? (
                 <span className="w-4 h-4 border-2 border-obsidian border-t-transparent rounded-full animate-spin" />

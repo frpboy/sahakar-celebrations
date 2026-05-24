@@ -64,7 +64,7 @@ const CoupleCard: React.FC<CoupleCardProps> = ({ names, role, desc, imageSrc, im
         {inviteLink && (
           <button
             onClick={() => window.open(inviteLink, '_blank')}
-            className="px-6 py-3 border border-gold/30 text-gold text-[10px] tracking-[0.2em] uppercase rounded-full bg-obsidian/40 backdrop-blur-sm group-hover:bg-gold group-hover:text-obsidian transition-all duration-500 font-sans"
+            className="px-6 py-3 rounded-full gold-chrome-btn active:scale-[0.98] cursor-pointer"
           >
             View Invitation
           </button>

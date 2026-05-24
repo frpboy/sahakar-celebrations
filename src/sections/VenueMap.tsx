@@ -65,7 +65,7 @@ export const VenueMap: React.FC = () => {
             href={directionsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-gold text-obsidian px-6 py-4 rounded-xl font-sans font-bold text-[10px] tracking-[0.25em] uppercase flex items-center justify-center gap-3 hover:bg-gold-light transition-all duration-300 shadow-lg shadow-gold/10"
+            className="px-6 py-4 rounded-xl gold-chrome-btn flex items-center justify-center gap-3 shadow-lg shadow-gold/10"
           >
             <Send className="w-3.5 h-3.5" />
             Navigate
