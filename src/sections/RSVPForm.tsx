@@ -144,7 +144,7 @@ export const RSVPForm: React.FC = () => {
                 value={formData.fullName}
                 onChange={handleInputChange}
                 placeholder="Name of attendee or firm"
-                className="bg-obsidian/40 border border-gold/10 focus:border-gold/40 py-2.5 px-4 text-sm text-ivory outline-none transition-all duration-300 rounded-xl placeholder:text-ivory/20"
+                className="bg-ivory/[0.03] hover:bg-ivory/[0.05] focus:bg-ivory/[0.08] border border-gold/10 focus:border-gold/40 py-2.5 px-4 text-sm text-ivory outline-none transition-all duration-300 rounded-xl placeholder:text-ivory/20 backdrop-blur-sm"
               />
               {errors.fullName && (
                 <span className="text-[8px] text-crimson mt-1 font-sans flex items-center gap-1 uppercase tracking-wider">
@@ -204,7 +204,7 @@ export const RSVPForm: React.FC = () => {
                   <label className="text-[8px] font-sans tracking-[0.2em] uppercase text-gold-dark/60 mb-2 font-bold">
                     Number of Attendees
                   </label>
-                  <div className="flex items-center gap-4 bg-obsidian/40 border border-gold/10 rounded-xl p-1.5 w-fit">
+                  <div className="flex items-center gap-4 bg-ivory/[0.03] border border-gold/10 rounded-xl p-1.5 w-fit backdrop-blur-sm">
                     <button
                       type="button"
                       onClick={decrementGuests}
@@ -235,7 +235,7 @@ export const RSVPForm: React.FC = () => {
                 value={formData.wishes}
                 onChange={handleInputChange}
                 placeholder="Leave a message for the families..."
-                className="bg-obsidian/40 border border-gold/10 focus:border-gold/40 p-4 text-sm text-ivory outline-none transition-all duration-300 rounded-xl resize-none min-h-[100px] placeholder:text-ivory/20"
+                className="bg-ivory/[0.03] hover:bg-ivory/[0.05] focus:bg-ivory/[0.08] border border-gold/10 focus:border-gold/40 p-4 text-sm text-ivory outline-none transition-all duration-300 rounded-xl resize-none min-h-[100px] placeholder:text-ivory/20 backdrop-blur-sm"
               />
             </div>
 
