@@ -48,24 +48,26 @@ export const Terrain: React.FC = () => {
         <meshStandardMaterial
           map={terrainTex}
           bumpMap={terrainTex}
-          bumpScale={0.15} // Low bump scale for smooth leather/glass feel
-          roughness={0.7}
-          metalness={0.2}
+          bumpScale={0.12} // Low bump scale for smooth silk feel
+          roughness={0.52} // Satin/silk sheen
+          metalness={0.45} // Rich metal reflections
           flatShading={false}
         />
       </mesh>
 
-      {/* Decorative Grid Overlay (for that tech/luxury sidewave vector mesh vibe) */}
+      {/* Decorative Grid Overlay (upgraded to Standard material so grid lines catch highlights) */}
       <mesh 
         geometry={geometry}
         rotation={[-Math.PI / 2, 0, 0]} 
         position={[0, -5.92, -10]}
       >
-        <meshBasicMaterial
+        <meshStandardMaterial
           color="#DFBA73"
           wireframe
           transparent
-          opacity={0.06}
+          opacity={0.09}
+          roughness={0.3}
+          metalness={0.8}
         />
       </mesh>
     </group>

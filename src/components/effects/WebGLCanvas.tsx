@@ -45,6 +45,15 @@ export const WebGLCanvas: React.FC = () => {
           color="#4A95D6" 
         />
 
+        {/* Soft volumetric center gold light (warm atmosphere glow) */}
+        <pointLight 
+          position={[0, 16, -15]} 
+          intensity={2.8} 
+          distance={80}
+          decay={1.2}
+          color="#DFBA73" 
+        />
+
         <Suspense fallback={null}>
           {/* Deformed Mesh Terrain */}
           <Terrain />
