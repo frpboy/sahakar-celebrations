@@ -18,6 +18,25 @@ const AppContent: React.FC = () => {
   const [splashActive, setSplashActive] = useState(true);
 
   useEffect(() => {
+    // Automatically update the address bar and status bar to match the active preset theme
+    const themeColor = '#05060A';
+    
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement('meta');
+      metaThemeColor.setAttribute('name', 'theme-color');
+      document.head.appendChild(metaThemeColor);
+    }
+    metaThemeColor.setAttribute('content', themeColor);
+
+    let metaAppleStatus = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+    if (!metaAppleStatus) {
+      metaAppleStatus = document.createElement('meta');
+      metaAppleStatus.setAttribute('name', 'apple-mobile-web-app-status-bar-style');
+      document.head.appendChild(metaAppleStatus);
+    }
+    metaAppleStatus.setAttribute('content', 'black-translucent');
+
     if (!entered) return;
 
     // Initialize Lenis smooth scrolling
