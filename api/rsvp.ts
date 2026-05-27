@@ -3,6 +3,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 // Optional database integration client pooler
 // If the user configures DATABASE_URL, this will connect to Neon database
 let pool: any = null;
+let dbInitError: string | null = null;
 if (process.env.DATABASE_URL) {
   try {
     const { Pool } = require('pg');
@@ -12,8 +13,12 @@ if (process.env.DATABASE_URL) {
     });
   } catch (err) {
     console.error('Failed to initialize PG Pool:', err);
+    dbInitError = err instanceof Error ? err.message : String(err);
   }
 }
+
+const getDbUnavailableMessage = () =>
+  'Database is unavailable on this server. Ensure DATABASE_URL is set and pg client initialization succeeds.';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // GET: Fetch all wishes/RSVPs
@@ -29,8 +34,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const result = await pool.query(queryText);
         return res.status(200).json({ success: true, data: result.rows });
       } else {
-        // No database configured: return empty wishes list instead of dummy content
-        return res.status(200).json({ success: true, data: [] });
+        return res.status(503).json({
+          success: false,
+          message: getDbUnavailableMessage(),
+          data: [],
+          diagnostics: {
+            dbConfigured: Boolean(process.env.DATABASE_URL),
+            dbClientReady: Boolean(pool),
+            dbInitError,
+          },
+        });
       }
     } catch (error: any) {
       return res.status(500).json({ success: false, message: error.message });
@@ -46,24 +59,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(400).json({ success: false, message: 'Full Name is required.' });
       }
 
-      if (pool) {
-        const queryText = `
-          INSERT INTO rsvps (full_name, attendance, guest_count, wishes)
-          VALUES ($1, $2, $3, $4)
-          RETURNING id;
-        `;
-        const values = [
-          fullName.trim(),
-          attendance,
-          attendance === 'attending' ? parseInt(guestCount) || 1 : 0,
-          wishes ? wishes.trim() : null
-        ];
-
-        const result = await pool.query(queryText, values);
-        return res.status(201).json({ success: true, id: result.rows[0].id });
-      } else {
-        return res.status(200).json({ success: true, message: 'Simulation mode' });
+      if (!pool) {
+        return res.status(503).json({
+          success: false,
+          message: getDbUnavailableMessage(),
+          diagnostics: {
+            dbConfigured: Boolean(process.env.DATABASE_URL),
+            dbClientReady: Boolean(pool),
+            dbInitError,
+          },
+        });
       }
+
+      const queryText = `
+        INSERT INTO rsvps (full_name, attendance, guest_count, wishes)
+        VALUES ($1, $2, $3, $4)
+        RETURNING id;
+      `;
+      const values = [
+        fullName.trim(),
+        attendance,
+        attendance === 'attending' ? parseInt(guestCount) || 1 : 0,
+        wishes ? wishes.trim() : null
+      ];
+
+      const result = await pool.query(queryText, values);
+      return res.status(201).json({ success: true, id: result.rows[0].id });
     } catch (error: any) {
       return res.status(500).json({ success: false, message: error.message });
     }
