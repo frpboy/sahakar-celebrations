@@ -51,7 +51,7 @@ const CoupleCard: React.FC<CoupleCardProps> = ({ names, role, desc, imageSrc, im
     >
       {/* Render only active image to avoid downloading every carousel image on initial load */}
       <div 
-        className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out group-hover:scale-105 z-0"
+        className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out group-hover:scale-105 z-0 ios-photo-safe"
         style={{
           backgroundImage: `url(${resolvedImage})`
         }}

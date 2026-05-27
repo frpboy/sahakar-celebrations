@@ -234,3 +234,22 @@ html.lenis, html.lenis body {
     opacity: 1;
   }
 }
+
+/* iOS/WebKit yellow-cast mitigation for photo-heavy sections */
+@supports (-webkit-touch-callout: none) {
+  body::after {
+    mix-blend-mode: normal;
+    opacity: 0.015;
+  }
+
+  .glass-card {
+    -webkit-backdrop-filter: blur(22px);
+    backdrop-filter: blur(22px);
+  }
+
+  .ios-photo-safe {
+    isolation: isolate;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+}

@@ -6,6 +6,7 @@ import { getGoogleMapsQueryEmbedUrl } from '../lib/maps';
 import { generateGoogleCalendarUrl } from '../lib/calendar';
 
 export const VenueMap: React.FC = () => {
+  const isWebKitIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
   const mapEmbedUrl = getGoogleMapsQueryEmbedUrl(weddingData.wedding.mapEmbedQuery);
   const directionsUrl = weddingData.wedding.mapsUrl;
 
@@ -51,7 +52,7 @@ export const VenueMap: React.FC = () => {
             src={mapEmbedUrl}
             width="100%"
             height="100%"
-            style={{ border: 0, filter: 'invert(90%) hue-rotate(180) brightness(95%) contrast(90%)' }}
+            style={{ border: 0, filter: isWebKitIOS ? 'none' : 'invert(90%) hue-rotate(180) brightness(95%) contrast(90%)' }}
             allowFullScreen={true}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
