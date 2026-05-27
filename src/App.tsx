@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { MusicProvider } from './context/MusicContext';
 import { SplashIntro } from './components/cinematic/SplashIntro';
 import { WebGLCanvas } from './components/effects/WebGLCanvas';
+import { SilkMouseTrail } from './components/effects/SilkMouseTrail';
 import { AudioToggle } from './components/ui/AudioToggle';
 import { Hero } from './sections/Hero';
 import { CoupleShowcase } from './sections/CoupleShowcase';
@@ -66,6 +67,7 @@ const AppContent: React.FC = () => {
     <div className="relative min-h-screen text-ivory bg-[#05060A]">
       {/* WebGL 3D Landscape Canvas is always active to pre-render the canyon */}
       <WebGLCanvas />
+      <SilkMouseTrail />
       
       {entered && (
         <>
