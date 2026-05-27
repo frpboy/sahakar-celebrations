@@ -27,3 +27,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+Trace-20260527T200512.json
+lighthouse log.txt

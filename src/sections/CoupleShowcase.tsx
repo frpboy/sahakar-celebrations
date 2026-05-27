@@ -14,6 +14,7 @@ interface CoupleCardProps {
 const CoupleCard: React.FC<CoupleCardProps> = ({ names, role, desc, imageSrc, images, inviteLink }) => {
   const carouselImages = images && images.length > 0 ? images : [imageSrc];
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+  const currentImage = carouselImages[currentImageIndex] || imageSrc;
 
   React.useEffect(() => {
     if (carouselImages.length <= 1) return;
@@ -31,16 +32,13 @@ const CoupleCard: React.FC<CoupleCardProps> = ({ names, role, desc, imageSrc, im
       transition={{ duration: 0.8, type: 'spring', bounce: 0.2 }}
       className="glass-card rounded-2xl overflow-hidden shadow-2xl relative group flex flex-col items-center justify-end h-[450px] md:h-[550px] w-full"
     >
-      {/* Carousel Backgrounds */}
-      {carouselImages.map((src, idx) => (
-        <div 
-          key={idx}
-          className={`absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out group-hover:scale-105 ${idx === currentImageIndex ? 'opacity-100 z-0' : 'opacity-0 -z-10'}`}
-          style={{
-            backgroundImage: `url(${src})`
-          }}
-        />
-      ))}
+      {/* Render only active image to avoid downloading every carousel image on initial load */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out group-hover:scale-105 z-0"
+        style={{
+          backgroundImage: `url(${currentImage})`
+        }}
+      />
       
       {/* Gradient Overlay Layer (Separated to fix iOS/Safari multi-background color-tint bugs) */}
       <div 

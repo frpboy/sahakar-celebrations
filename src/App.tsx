@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import Lenis from 'lenis';
 import { motion } from 'framer-motion';
 import { MusicProvider } from './context/MusicContext';
 import { SplashIntro } from './components/cinematic/SplashIntro';
-import { WebGLCanvas } from './components/effects/WebGLCanvas';
-import { SilkMouseTrail } from './components/effects/SilkMouseTrail';
-import { AudioToggle } from './components/ui/AudioToggle';
 import { Hero } from './sections/Hero';
-import { CoupleShowcase } from './sections/CoupleShowcase';
-import { EventTimeline } from './sections/EventTimeline';
-import { VenueMap } from './sections/VenueMap';
-import { RSVPForm } from './sections/RSVPForm';
-import { SharingSection } from './sections/SharingSection';
 import './App.css';
+
+const WebGLCanvas = lazy(() => import('./components/effects/WebGLCanvas').then((m) => ({ default: m.WebGLCanvas })));
+const SilkMouseTrail = lazy(() => import('./components/effects/SilkMouseTrail').then((m) => ({ default: m.SilkMouseTrail })));
+const AudioToggle = lazy(() => import('./components/ui/AudioToggle').then((m) => ({ default: m.AudioToggle })));
+const CoupleShowcase = lazy(() => import('./sections/CoupleShowcase').then((m) => ({ default: m.CoupleShowcase })));
+const EventTimeline = lazy(() => import('./sections/EventTimeline').then((m) => ({ default: m.EventTimeline })));
+const VenueMap = lazy(() => import('./sections/VenueMap').then((m) => ({ default: m.VenueMap })));
+const RSVPForm = lazy(() => import('./sections/RSVPForm').then((m) => ({ default: m.RSVPForm })));
+const SharingSection = lazy(() => import('./sections/SharingSection').then((m) => ({ default: m.SharingSection })));
 
 const AppContent: React.FC = () => {
   const [entered, setEntered] = useState(false);
@@ -65,22 +66,24 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="relative min-h-screen text-ivory bg-[#05060A]">
-      {/* WebGL 3D Landscape Canvas is always active to pre-render the canyon */}
-      <WebGLCanvas />
-      <SilkMouseTrail />
-      
       {entered && (
         <>
-          <AudioToggle />
+          <Suspense fallback={null}>
+            <WebGLCanvas />
+            <SilkMouseTrail />
+            <AudioToggle />
+          </Suspense>
 
           {/* Main Scroller Layout */}
           <main className="relative z-10 w-full">
             <Hero />
-            <CoupleShowcase />
-            <EventTimeline />
-            <VenueMap />
-            <RSVPForm />
-            <SharingSection />
+            <Suspense fallback={null}>
+              <CoupleShowcase />
+              <EventTimeline />
+              <VenueMap />
+              <RSVPForm />
+              <SharingSection />
+            </Suspense>
           </main>
 
           {/* Luxury Footer with Emotional Landing */}

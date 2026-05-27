@@ -13,30 +13,20 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const volumeIntervalRef = useRef<number | null>(null);
+  const isPlayingRef = useRef(false);
 
   useEffect(() => {
-    const audio = new Audio('/ambient-luxury.mp3');
-    audio.loop = true;
-    audio.volume = 0;
-    
-    // Add error handling for missing audio source
-    audio.onerror = () => {
-      console.warn("Audio source not found or not supported. Please ensure '/ambient-luxury.mp3' exists in the public folder.");
-    };
-
-    audioRef.current = audio;
-
     // Handle visibility/focus changes
     const handleVisibilityChange = () => {
       if (document.hidden) {
         pauseAudio();
-      } else if (isPlaying) {
+      } else if (isPlayingRef.current) {
         playAudio();
       }
     };
 
     const handleFocus = () => {
-      if (isPlaying) playAudio();
+      if (isPlayingRef.current) playAudio();
     };
 
     const handleBlur = () => {
@@ -54,12 +44,29 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       pauseAudio();
       audioRef.current = null;
     };
+  }, []);
+
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
   }, [isPlaying]);
 
+  const getAudio = () => {
+    if (audioRef.current) return audioRef.current;
+    const audio = new Audio('/ambient-luxury.mp3');
+    audio.loop = true;
+    audio.volume = 0;
+    audio.preload = 'none';
+    audio.onerror = () => {
+      console.warn("Audio source not found or not supported. Please ensure '/ambient-luxury.mp3' exists in the public folder.");
+    };
+    audioRef.current = audio;
+    return audio;
+  };
+
   const playAudio = () => {
-    if (!audioRef.current) return;
+    const audio = getAudio();
     
-    audioRef.current.play().catch(err => console.warn("Autoplay blocked:", err));
+    audio.play().catch(err => console.warn("Autoplay blocked:", err));
     
     // Volume Ramping Logic: 0 -> 0.25 -> 0.50 over 7 seconds
     if (volumeIntervalRef.current) clearInterval(volumeIntervalRef.current);
