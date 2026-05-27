@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import pkg from 'pg';
 
 // Optional database integration client pooler
 // If the user configures DATABASE_URL, this will connect to Neon database
@@ -6,7 +7,7 @@ let pool: any = null;
 let dbInitError: string | null = null;
 if (process.env.DATABASE_URL) {
   try {
-    const { Pool } = require('pg');
+    const { Pool } = pkg;
     pool = new Pool({
       connectionString: process.env.DATABASE_URL,
       ssl: { rejectUnauthorized: false }
