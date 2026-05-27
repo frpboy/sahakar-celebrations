@@ -29,15 +29,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const result = await pool.query(queryText);
         return res.status(200).json({ success: true, data: result.rows });
       } else {
-        // Mock data fallback if no DB configured
-        return res.status(200).json({ 
-          success: true, 
-          data: [
-            { name: 'Rahul', message: 'May your fights stay small and your food orders stay large.', attendance: 'attending' },
-            { name: 'Sameer Smr', message: 'Congratulations on your beautiful journey together!', attendance: 'attending' },
-            { name: 'John Doe', message: 'Congratulations on your wedding!', attendance: 'attending' },
-          ] 
-        });
+        // No database configured: return empty wishes list instead of dummy content
+        return res.status(200).json({ success: true, data: [] });
       }
     } catch (error: any) {
       return res.status(500).json({ success: false, message: error.message });

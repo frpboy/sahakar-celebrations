@@ -88,11 +88,12 @@ export const RSVPForm: React.FC = () => {
 
   const getVisibleWishes = (): VisibleWish[] => {
     const visibleCount = getVisibleCount();
-    if (displayWishes.length <= visibleCount) {
+    if (displayWishes.length <= 1) {
       return displayWishes.map((wish, index) => ({ wish, sourceIndex: index }));
     }
 
-    return Array.from({ length: visibleCount }, (_, offset) => {
+    const count = Math.min(visibleCount, displayWishes.length);
+    return Array.from({ length: count }, (_, offset) => {
       const sourceIndex = (currentIndex + offset) % displayWishes.length;
       return { wish: displayWishes[sourceIndex], sourceIndex };
     });
