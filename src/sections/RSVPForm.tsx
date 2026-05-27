@@ -8,6 +8,11 @@ interface Wish {
   status: 'ATTENDING' | 'DECLINED';
 }
 
+interface VisibleWish {
+  wish: Wish;
+  sourceIndex: number;
+}
+
 export const RSVPForm: React.FC = () => {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -81,13 +86,15 @@ export const RSVPForm: React.FC = () => {
     }
   };
 
-  const getVisibleWishes = () => {
+  const getVisibleWishes = (): VisibleWish[] => {
     const visibleCount = getVisibleCount();
-    if (displayWishes.length <= visibleCount) return displayWishes;
+    if (displayWishes.length <= visibleCount) {
+      return displayWishes.map((wish, index) => ({ wish, sourceIndex: index }));
+    }
 
     return Array.from({ length: visibleCount }, (_, offset) => {
-      const index = (currentIndex + offset) % displayWishes.length;
-      return displayWishes[index];
+      const sourceIndex = (currentIndex + offset) % displayWishes.length;
+      return { wish: displayWishes[sourceIndex], sourceIndex };
     });
   };
 
@@ -382,13 +389,13 @@ export const RSVPForm: React.FC = () => {
               </div>
             ) : (
               <AnimatePresence initial={false} mode="popLayout">
-                {getVisibleWishes().map((wish, index) => (
+                {getVisibleWishes().map(({ wish, sourceIndex }) => (
                   <motion.div
-                    key={`${wish.name}-${wish.message}-${(currentIndex + index) % displayWishes.length}`}
+                    key={`${wish.name}-${wish.message}-${sourceIndex}`}
                     layout
-                    initial={{ opacity: 0, y: 18, scale: 0.98 }}
+                    initial={{ opacity: 0, y: 26, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -18, scale: 0.98 }}
+                    exit={{ opacity: 0, y: -26, scale: 0.98 }}
                     transition={{ duration: 0.45, ease: 'easeOut' }}
                     className="bg-ivory/[0.03] border border-gold/10 rounded-xl p-5 hover:bg-ivory/[0.05] transition-all duration-300 group shadow-sm overflow-hidden"
                   >
