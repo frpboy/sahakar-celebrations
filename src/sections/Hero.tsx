@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { weddingData } from '../config/wedding';
+import { useGuest } from '../hooks/useGuest';
 
 const SparkleText: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
@@ -52,11 +53,18 @@ const SparkleText: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 export const Hero: React.FC = () => {
+  const guestInfo = useGuest();
   const welcomeRef = useRef<HTMLDivElement | null>(null);
   const titleRef = useRef<HTMLDivElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const inviteBadge =
+    guestInfo.inviteType === 'vip'
+      ? 'VIP Invitation'
+      : guestInfo.inviteType === 'family'
+        ? 'Family Invitation'
+        : 'Special Invitation';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -123,10 +131,17 @@ export const Hero: React.FC = () => {
           <span ref={welcomeRef} className="text-[10px] md:text-xs tracking-[0.5em] uppercase text-gold mb-6 block font-sans font-bold">
             Sahakar Medical Ventures
           </span>
+          <p className="text-[10px] md:text-xs tracking-[0.32em] uppercase text-gold-light/80 mb-4 font-sans font-semibold">
+            {inviteBadge}
+          </p>
           <h1 ref={titleRef} className="text-4xl md:text-8xl font-serif text-ivory tracking-[0.2em] mb-10 uppercase leading-[1.1] drop-shadow-2xl">
             Family <br /> Celebrations
           </h1>
           <div className="w-12 h-[1px] bg-gold/30 mx-auto mb-10" />
+          <p className="text-sm md:text-base text-gold-light mb-4 tracking-[0.08em] uppercase font-sans">
+            To {guestInfo.name}
+            {guestInfo.isCoupled ? ' & Family' : ''}
+          </p>
           <h2 className="text-sm md:text-lg font-serif text-ivory/70 tracking-widest max-w-2xl mx-auto leading-relaxed italic uppercase">
             Cordially inviting you to an evening of elegance as we celebrate the matrimonial unions of <SparkleText>Shabin & Sana</SparkleText> and <SparkleText>Sameer & Nihala</SparkleText> within the Sahakar Family.
           </h2>
@@ -160,6 +175,9 @@ export const Hero: React.FC = () => {
 
           <p className="font-serif text-gold-light tracking-[0.15em] text-xs md:text-sm uppercase mb-4">
             Request the Honor of your Presence
+          </p>
+          <p className="text-gold/70 text-[10px] md:text-xs uppercase tracking-[0.25em] mb-3 font-sans">
+            Addressed to {guestInfo.name}
           </p>
           <p className="text-ivory/80 text-sm md:text-base font-sans leading-relaxed tracking-wide mb-8 max-w-md mx-auto">
             To join us in celebrating the grand matrimonial unions and ceremonial gatherings of our family as we step into a new chapter of love and lineage.

@@ -1,7 +1,6 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { EffectComposer, Bloom, Noise, Vignette, DepthOfField } from '@react-three/postprocessing';
-import { Terrain } from './Terrain';
 import { WebGLParticles } from './WebGLParticles';
 import { CameraChoreography } from './CameraChoreography';
 import { FluidDistortion } from './FluidDistortion';
@@ -56,9 +55,6 @@ export const WebGLCanvas: React.FC = () => {
         />
 
         <Suspense fallback={null}>
-          {/* Deformed Mesh Terrain */}
-          <Terrain />
-          
           {/* Floating Gold & Sapphire Particles */}
           <WebGLParticles />
           

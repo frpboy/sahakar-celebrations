@@ -85,8 +85,35 @@ A sophisticated, high-end digital invitation platform built for the Sahakar Fami
 
 ---
 
+## 🔗 Personalized Invite URL Templates
+Use these URL patterns to prefill guest personalization on the live invitation:
+
+- https://www.sahakar-celebrations.in/?guest={NAME}
+- https://www.sahakar-celebrations.in/?g={NAME}
+- https://www.sahakar-celebrations.in/?to={NAME}
+- https://www.sahakar-celebrations.in/?name={NAME}
+
+Optional invite type:
+
+- https://www.sahakar-celebrations.in/?guest={NAME}&inv=vip
+- https://www.sahakar-celebrations.in/?guest={NAME}&inv=family
+- https://www.sahakar-celebrations.in/?guest={NAME}&invite=vip (alias for inv)
+
+Examples:
+
+- https://www.sahakar-celebrations.in/?to=Rahul%20Sharma
+- https://www.sahakar-celebrations.in/?name=Anita%20%26%20Raj&inv=family
+- https://www.sahakar-celebrations.in/?g=Dr%20Mehta&invite=vip
+
+Notes:
+
+- Encode spaces as %20 (browsers usually auto-encode).
+- Couple mode is auto-detected when a name includes `and`, `&`, or `n`.
+---
 ## 📜 Credits
 
 Designed and brought to life with love by **[Rahul](https://github.com/frpboy)**.
 
 © 2026 **Sahakar Medical Ventures**. All rights reserved.
+
+

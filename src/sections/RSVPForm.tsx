@@ -24,23 +24,41 @@ export const RSVPForm: React.FC = () => {
   // Dynamic wishes from database
   const [displayWishes, setDisplayWishes] = useState<Wish[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isManuallyPaused, setIsManuallyPaused] = useState(false);
 
   useEffect(() => {
     fetchWishes();
   }, []);
 
-  // Auto-scroll loop: rotates wishes showing 3 at a time
+  const getVisibleCount = () => {
+    if (displayWishes.length <= 2) return displayWishes.length;
+
+    const sample = displayWishes.slice(currentIndex, currentIndex + 4);
+    const wrappedSample =
+      sample.length === 4
+        ? sample
+        : [...sample, ...displayWishes.slice(0, 4 - sample.length)];
+    const maxMessageLength = wrappedSample.reduce(
+      (max, wish) => Math.max(max, wish.message.length),
+      0
+    );
+
+    if (maxMessageLength >= 240) return 2;
+    if (maxMessageLength >= 150) return 3;
+    return Math.min(4, displayWishes.length);
+  };
+
+  // Auto-scroll loop: rotates wishes every 3s unless paused by hover/click
   useEffect(() => {
-    if (displayWishes.length <= 3 || isPaused || isHovered) return;
+    if (displayWishes.length <= 1 || isHovered || isManuallyPaused) return;
 
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 3) % displayWishes.length);
-    }, 5000); // cycle duration 5s
+      setCurrentIndex((prev) => (prev + 1) % displayWishes.length);
+    }, 3000);
 
     return () => clearInterval(timer);
-  }, [displayWishes.length, isPaused, isHovered]);
+  }, [displayWishes.length, isHovered, isManuallyPaused]);
 
   const fetchWishes = async () => {
     try {
@@ -64,13 +82,13 @@ export const RSVPForm: React.FC = () => {
   };
 
   const getVisibleWishes = () => {
-    if (displayWishes.length <= 3) return displayWishes;
-    const first = displayWishes[currentIndex % displayWishes.length];
-    const secondIndex = (currentIndex + 1) % displayWishes.length;
-    const thirdIndex = (currentIndex + 2) % displayWishes.length;
-    const second = displayWishes[secondIndex];
-    const third = displayWishes[thirdIndex];
-    return [first, second, third];
+    const visibleCount = getVisibleCount();
+    if (displayWishes.length <= visibleCount) return displayWishes;
+
+    return Array.from({ length: visibleCount }, (_, offset) => {
+      const index = (currentIndex + offset) % displayWishes.length;
+      return displayWishes[index];
+    });
   };
 
   const validate = () => {
@@ -145,10 +163,10 @@ export const RSVPForm: React.FC = () => {
 
   return (
     <section className="py-20 px-4 md:px-12 max-w-6xl mx-auto w-full relative z-20">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
         
         {/* Left Column: RSVP Form */}
-        <div className="glass-card p-6 md:p-8 rounded-2xl shadow-2xl relative overflow-hidden">
+        <div className="glass-card p-6 md:p-8 rounded-2xl shadow-2xl relative overflow-hidden h-full flex flex-col min-h-[520px] md:h-[640px]">
           {/* Edge Lighting */}
           <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-br from-gold/[0.02] via-transparent to-transparent pointer-events-none" />
@@ -312,7 +330,7 @@ export const RSVPForm: React.FC = () => {
         </div>
 
         {/* Right Column: Wishes Wall */}
-        <div className="glass-card p-6 md:p-8 rounded-2xl shadow-2xl h-full flex flex-col min-h-[500px] relative overflow-hidden">
+        <div className="glass-card p-6 md:p-8 rounded-2xl shadow-2xl h-full flex flex-col min-h-[520px] md:h-[640px] relative overflow-hidden">
           {/* Edge Lighting */}
           <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-bl from-gold/[0.02] via-transparent to-transparent pointer-events-none" />
@@ -324,7 +342,7 @@ export const RSVPForm: React.FC = () => {
                 Wishes & Messages
               </h2>
             </div>
-            {(isPaused || isHovered) && displayWishes.length > 3 && (
+            {(isHovered || isManuallyPaused) && displayWishes.length > 1 && (
               <span className="text-[8px] tracking-[0.15em] text-gold/40 uppercase font-sans animate-pulse">
                 Paused
               </span>
@@ -332,11 +350,11 @@ export const RSVPForm: React.FC = () => {
           </div>
 
           <div 
-            className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar cursor-pointer"
+            className="flex-1 overflow-hidden space-y-4 pr-2 cursor-pointer"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={() => setIsPaused(prev => !prev)}
-            title="Click to Pause/Resume message loop"
+            onClick={() => setIsManuallyPaused((prev) => !prev)}
+            title="Auto-rotates every 3s. Hover or click to pause."
           >
             {displayWishes.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center py-10 relative">
@@ -363,14 +381,15 @@ export const RSVPForm: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-transparent via-gold/[0.02] to-transparent animate-[pulse_6s_infinite] pointer-events-none" />
               </div>
             ) : (
-              <AnimatePresence initial={false}>
-                {getVisibleWishes().map((wish) => (
+              <AnimatePresence initial={false} mode="popLayout">
+                {getVisibleWishes().map((wish, index) => (
                   <motion.div
-                    key={wish.name + wish.message}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.4 }}
+                    key={`${wish.name}-${wish.message}-${(currentIndex + index) % displayWishes.length}`}
+                    layout
+                    initial={{ opacity: 0, y: 18, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -18, scale: 0.98 }}
+                    transition={{ duration: 0.45, ease: 'easeOut' }}
                     className="bg-ivory/[0.03] border border-gold/10 rounded-xl p-5 hover:bg-ivory/[0.05] transition-all duration-300 group shadow-sm overflow-hidden"
                   >
                     <div className="flex items-center gap-2 mb-2.5">
