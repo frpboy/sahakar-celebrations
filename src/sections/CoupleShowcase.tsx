@@ -11,10 +11,21 @@ interface CoupleCardProps {
   inviteLink: string;
 }
 
+const pickResponsiveImage = (src: string, viewportWidth: number, dpr: number) => {
+  const match = src.match(/^(.*)\.(webp|jpeg|jpg)$/i);
+  if (!match) return src;
+  const [, base, ext] = match;
+  const target = viewportWidth * dpr;
+  const width = target <= 700 ? 640 : target <= 1100 ? 960 : 1280;
+  return `${base}-${width}.${ext}`;
+};
+
 const CoupleCard: React.FC<CoupleCardProps> = ({ names, role, desc, imageSrc, images, inviteLink }) => {
   const carouselImages = images && images.length > 0 ? images : [imageSrc];
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+  const [viewportWidth, setViewportWidth] = React.useState<number>(() => (typeof window === 'undefined' ? 1280 : window.innerWidth));
   const currentImage = carouselImages[currentImageIndex] || imageSrc;
+  const resolvedImage = pickResponsiveImage(currentImage, viewportWidth, typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1);
 
   React.useEffect(() => {
     if (carouselImages.length <= 1) return;
@@ -23,6 +34,12 @@ const CoupleCard: React.FC<CoupleCardProps> = ({ names, role, desc, imageSrc, im
     }, 5000);
     return () => clearInterval(interval);
   }, [carouselImages.length]);
+
+  React.useEffect(() => {
+    const onResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   return (
     <motion.div
@@ -36,7 +53,7 @@ const CoupleCard: React.FC<CoupleCardProps> = ({ names, role, desc, imageSrc, im
       <div 
         className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out group-hover:scale-105 z-0"
         style={{
-          backgroundImage: `url(${currentImage})`
+          backgroundImage: `url(${resolvedImage})`
         }}
       />
       
