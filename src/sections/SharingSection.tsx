@@ -7,15 +7,15 @@ export const SharingSection: React.FC = () => {
   const shareOnWhatsApp = () => {
     const currentUrl = window.location.origin;
     const text = encodeURIComponent(
-      `You are cordially invited to the wedding celebration of Muhammed Shabin & Sana and Mohammed Sameer & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center. View details & RSVP: ${currentUrl}/`
+      `Official invitation of Muhammed Shabin & Sana and Mohammed Sameer Kallangadan & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center, Perinthalmanna.\n\nView details & RSVP: ${currentUrl}/`
     );
-    window.open(`https://wa.me/?text=${text}`, '_blank');
+    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
 
   const shareOnInstagram = async () => {
     const currentUrl = window.location.origin;
     const title = 'Sahakar Family Celebrations';
-    const text = 'You are cordially invited to the wedding celebration of Muhammed Shabin & Sana and Mohammed Sameer & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center.';
+    const text = 'Official invitation of Muhammed Shabin & Sana and Mohammed Sameer Kallangadan & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center, Perinthalmanna.';
     
     // 1. Try native Web Share API
     if (navigator.share) {
