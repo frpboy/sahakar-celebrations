@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export const SharingSection: React.FC = () => {
   const [showToast, setShowToast] = useState(false);
+  const instagramUrl = 'https://www.instagram.com/sahakar_medicals_official/';
 
   const shareOnWhatsApp = () => {
     const currentUrl = window.location.origin;
     const text = encodeURIComponent(
-      `Official invitation of Muhammed Shabin & Sana and Mohammed Sameer Kallangadan & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center, Perinthalmanna.\n\nView details & RSVP: ${currentUrl}/`
+      `Official invitation of Muhammed Shabin & Sana and Mohammed Sameer Kallangadan & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center, Perinthalmanna.\n\nYou are cordially invited to the wedding of Mr. Sameer and Mr. Shabin (Founder Directors of Sahakar Group of Companies) this Sunday, the 19th of this month in the evening. Kindly accept this invitation and bless them with your esteemed presence.\n\nView details & RSVP: ${currentUrl}/\nInstagram: ${instagramUrl}`
     );
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
@@ -15,7 +16,7 @@ export const SharingSection: React.FC = () => {
   const shareOnInstagram = async () => {
     const currentUrl = window.location.origin;
     const title = 'Sahakar Family Celebrations';
-    const text = 'Official invitation of Muhammed Shabin & Sana and Mohammed Sameer Kallangadan & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center, Perinthalmanna.';
+    const text = 'Official invitation of Muhammed Shabin & Sana and Mohammed Sameer Kallangadan & Nihala Jasmin KK on Sunday, July 19, 2026 at Shifa Convention Center, Perinthalmanna.\n\nYou are cordially invited to the wedding of Mr. Sameer and Mr. Shabin (Founder Directors of Sahakar Group of Companies) this Sunday, the 19th of this month in the evening. Kindly accept this invitation and bless them with your esteemed presence.';
     
     // 1. Try native Web Share API
     if (navigator.share) {
@@ -33,7 +34,7 @@ export const SharingSection: React.FC = () => {
 
     // 2. Fallback: Copy to clipboard
     try {
-      await navigator.clipboard.writeText(`${text}\n\nView details & RSVP: ${currentUrl}/`);
+      await navigator.clipboard.writeText(`${text}\n\nView details & RSVP: ${currentUrl}/\nInstagram: ${instagramUrl}`);
       setShowToast(true);
       setTimeout(() => setShowToast(false), 4000);
     } catch (err) {

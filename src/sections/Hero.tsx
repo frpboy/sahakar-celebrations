@@ -145,6 +145,9 @@ export const Hero: React.FC = () => {
           <h2 className="text-sm md:text-lg font-serif text-ivory/70 tracking-widest max-w-2xl mx-auto leading-relaxed italic uppercase">
             Cordially inviting you to an evening of elegance as we celebrate the matrimonial unions of <SparkleText>Shabin & Sana</SparkleText> and <SparkleText>Sameer & Nihala</SparkleText> within the Sahakar Family.
           </h2>
+          <p className="mt-6 max-w-3xl text-xs md:text-sm text-gold-light/80 leading-relaxed tracking-[0.12em] uppercase font-sans">
+            You are cordially invited to the wedding of Mr. Sameer and Mr. Shabin, Founder Directors of Sahakar Group of Companies, this Sunday, the 19th of this month in the evening. Kindly accept this invitation and bless them with your esteemed presence.
+          </p>
         </div>
 
         {/* Downward indicator arrow */}
