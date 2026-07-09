@@ -68,31 +68,23 @@ export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     
     audio.play().catch(err => console.warn("Autoplay blocked:", err));
     
-    // Volume Ramping Logic: 0 -> 0.25 -> 0.50 over 7 seconds
+    // Volume Ramping Logic: 0 -> 0.25 over 5 seconds
     if (volumeIntervalRef.current) clearInterval(volumeIntervalRef.current);
     
-    let startTime = Date.now();
-    const duration = 7000; // 7 seconds total
+    const startTime = Date.now();
+    const duration = 5000;
 
     volumeIntervalRef.current = window.setInterval(() => {
       const elapsed = Date.now() - startTime;
       
       if (elapsed >= duration) {
-        if (audioRef.current) audioRef.current.volume = 0.5;
+        if (audioRef.current) audioRef.current.volume = 0.25;
         if (volumeIntervalRef.current) clearInterval(volumeIntervalRef.current);
         return;
       }
 
-      // Step-based ramping as requested: 
-      // First 3.5s: 0 to 0.25
-      // Next 3.5s: 0.25 to 0.50
-      if (elapsed < duration / 2) {
-        const progress = elapsed / (duration / 2);
-        if (audioRef.current) audioRef.current.volume = progress * 0.25;
-      } else {
-        const progress = (elapsed - duration / 2) / (duration / 2);
-        if (audioRef.current) audioRef.current.volume = 0.25 + (progress * 0.25);
-      }
+      const progress = elapsed / duration;
+      if (audioRef.current) audioRef.current.volume = progress * 0.25;
     }, 50);
   };
 
